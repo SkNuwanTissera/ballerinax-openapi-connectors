@@ -1,7 +1,7 @@
 [package]
 license = ["Apache-2.0"]
 keywords = ["Marketing/Social Media Marketing", "Cost/Freemium"]
-org = "ballerinax"
+org = "testingopenapis"
 name = "ritekit"
 icon = "icon.png"
 repository = "https://github.com/ballerina-platform/ballerinax-openapi-connectors"

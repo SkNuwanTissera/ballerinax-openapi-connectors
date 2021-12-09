@@ -9,6 +9,8 @@ on:
 jobs:
   container:
     runs-on: ubuntu-latest
+    env: # need to remove this after latest connectors are pushed to prod central
+      BALLERINA_STAGE_CENTRAL: true
     container:
       image: ballerina/ballerina:swan-lake-beta3
       options: --user root
@@ -32,7 +34,7 @@ jobs:
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           signoff: false
           branch: release/file-update
-          base: main
+          base: removeSnapshotOnVersionBump
           title: Update file hashes
           body: |
             Update file hashes

@@ -1,5 +1,5 @@
 [package]
-org = "ballerinax"
+org = "testingopenapis"
 name = "beezup.merchant"
 version = "1.0.0"
 icon = "icon.png"

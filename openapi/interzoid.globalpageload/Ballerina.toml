@@ -1,7 +1,7 @@
 [package]
 license = ["Apache-2.0"]
 keywords = ["IT Operations/Cloud Services", "Cost/Freemium"]
-org = "ballerinax"
+org = "testingopenapis"
 name = "interzoid.globalpageload"
 icon = "icon.png"
 repository = "https://github.com/ballerina-platform/ballerinax-openapi-connectors"
