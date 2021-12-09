@@ -4,10 +4,9 @@ keywords = ["Finance/Accounting", "Cost/Paid"]
 org = "testingopenapis"
 name = "freshbooks"
 icon = "icon.png"
-distribution="slbeta3"
+distribution = "slbeta3"
 repository = "https://github.com/ballerina-platform/ballerinax-openapi-connectors"
-version = "1.0.0"
+version = "1.0.1"
 authors = ["Ballerina"]
-
 [build-options]
 observabilityIncluded = true

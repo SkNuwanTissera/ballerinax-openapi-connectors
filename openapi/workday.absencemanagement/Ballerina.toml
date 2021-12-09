@@ -1,9 +1,9 @@
 [package]
-org = "testingopenapis"
-name = "workday.absencemanagement"
-version = "1.0.0"
-icon = "icon.png"
 license = ["Apache-2.0"]
 keywords = ["Human Resources/HRM", "Cost/Paid"]
+org = "testingopenapis"
+name = "workday.absencemanagement"
+icon = "icon.png"
 repository = "https://github.com/ballerina-platform/ballerinax-openapi-connectors"
+version = "1.0.1"
 authors = ["Ballerina"]

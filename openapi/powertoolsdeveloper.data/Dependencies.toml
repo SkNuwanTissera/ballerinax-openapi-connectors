@@ -153,9 +153,7 @@ org = "ballerina"
 name = "lang.runtime"
 version = "0.0.0"
 dependencies = [
-	{org = "ballerina", name = "jballerina.java"},
-	{org = "ballerina", name = "lang.array"},
-	{org = "ballerina", name = "lang.value"}
+	{org = "ballerina", name = "jballerina.java"}
 ]
 
 [[package]]
@@ -269,7 +267,7 @@ modules = [
 ]
 
 [[package]]
-org = "ballerinax"
+org = "testingopenapis"
 name = "powertoolsdeveloper.data"
 version = "1.0.1"
 dependencies = [
@@ -277,7 +275,7 @@ dependencies = [
 	{org = "ballerinai", name = "observe"}
 ]
 modules = [
-	{org = "ballerinax", packageName = "powertoolsdeveloper.data", moduleName = "powertoolsdeveloper.data"}
+	{org = "testingopenapis", packageName = "powertoolsdeveloper.data", moduleName = "powertoolsdeveloper.data"}
 ]
 
 

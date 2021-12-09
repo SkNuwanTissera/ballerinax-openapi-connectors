@@ -258,7 +258,7 @@ modules = [
 ]
 
 [[package]]
-org = "ballerinax"
+org = "testingopenapis"
 name = "beezup.merchant"
 version = "1.0.0"
 dependencies = [
@@ -266,8 +266,7 @@ dependencies = [
 	{org = "ballerina", name = "url"}
 ]
 modules = [
-	{org = "ballerinax", packageName = "beezup.merchant", moduleName = "beezup.merchant"},
-	{org = "ballerinax", packageName = "beezup.merchant", moduleName = "beezup.merchant.merchant"}
+	{org = "testingopenapis", packageName = "beezup.merchant", moduleName = "beezup.merchant"}
 ]
 
 

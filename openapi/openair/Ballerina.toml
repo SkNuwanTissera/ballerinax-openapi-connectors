@@ -6,7 +6,7 @@ name = "openair"
 icon = "icon.png"
 distribution = "slbeta3"
 repository = "https://github.com/ballerina-platform/ballerinax-openapi-connectors"
-version = "1.0.1"
+version = "1.0.2"
 authors = ["Ballerina"]
 [build-options]
 observabilityIncluded = true
