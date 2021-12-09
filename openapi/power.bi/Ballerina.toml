@@ -1,7 +1,7 @@
 [package]
 license = ["Apache-2.0"]
 keywords = ["Business Intelligence/Analytics", "Cost/Paid", "Vendor/Microsoft"]
-org = "ballerinax"
+org = "testingopenapis"
 name = "power.bi"
 icon = "icon.png"
 repository = "https://github.com/ballerina-platform/ballerinax-openapi-connectors"

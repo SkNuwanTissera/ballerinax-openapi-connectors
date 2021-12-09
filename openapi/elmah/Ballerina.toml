@@ -1,7 +1,7 @@
 [package]
 license = ["Apache-2.0"]
 keywords = ["IT Operations/Debug Tools", "Cost/Paid"]
-org = "ballerinax"
+org = "testingopenapis"
 name = "elmah"
 icon = "icon.png"
 repository = "https://github.com/ballerina-platform/ballerinax-openapi-connectors"

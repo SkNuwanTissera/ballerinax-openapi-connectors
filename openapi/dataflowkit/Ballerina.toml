@@ -1,7 +1,7 @@
 [package]
 license = ["Apache-2.0"]
 keywords = ["Website & App Building/Web Scraper", "Cost/Freemium"]
-org = "ballerinax"
+org = "testingopenapis"
 name = "dataflowkit"
 icon = "icon.png"
 repository = "https://github.com/ballerina-platform/ballerinax-openapi-connectors"

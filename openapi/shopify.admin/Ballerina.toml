@@ -1,5 +1,5 @@
 [package]
-org = "ballerinax"
+org = "testingopenapis"
 name = "shopify.admin"
 icon = "icon.png"
 version = "1.0.0"
