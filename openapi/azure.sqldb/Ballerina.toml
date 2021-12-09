@@ -1,12 +1,11 @@
 [package]
+license = ["Apache-2.0"]
+keywords = ["IT Operations/Databases", "Cost/Paid", "Vendor/Microsoft"]
 org = "testingopenapis"
 name = "azure.sqldb"
 icon = "icon.png"
-version = "1.0.0"
-license= ["Apache-2.0"]
-authors = ["Ballerina"]
-keywords = ["IT Operations/Databases","Cost/Paid","Vendor/Microsoft"]
 repository = "https://github.com/ballerina-platform/ballerinax-openapi-connectors"
-
+version = "1.0.1"
+authors = ["Ballerina"]
 [build-options]
 observabilityIncluded = true

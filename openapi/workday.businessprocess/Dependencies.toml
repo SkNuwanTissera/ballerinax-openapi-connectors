@@ -258,7 +258,7 @@ modules = [
 ]
 
 [[package]]
-org = "ballerinax"
+org = "testingopenapis"
 name = "workday.businessprocess"
 version = "1.0.0"
 dependencies = [
@@ -266,8 +266,7 @@ dependencies = [
 	{org = "ballerina", name = "url"}
 ]
 modules = [
-	{org = "ballerinax", packageName = "workday.businessprocess", moduleName = "workday.businessprocess"},
-	{org = "ballerinax", packageName = "workday.businessprocess", moduleName = "workday.businessprocess.businessprocess"}
+	{org = "testingopenapis", packageName = "workday.businessprocess", moduleName = "workday.businessprocess"}
 ]
 
 

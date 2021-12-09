@@ -1,9 +1,9 @@
 [package]
+license = ["Apache-2.0"]
+keywords = ["Finance/Accounting", "Cost/Paid"]
 org = "testingopenapis"
 name = "zuora.revenue"
-version = "1.0.0"
 icon = "icon.png"
-license= ["Apache-2.0"]
+repository = "https://github.com/ballerina-platform/ballerinax-openapi-connectors"
+version = "1.0.1"
 authors = ["Ballerina"]
-keywords = ["Finance/Accounting","Cost/Paid"]
-repository = "https://github.com/ballerina-platform/ballerinax-openapi-connectors" 
