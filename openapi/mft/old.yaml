@@ -1,0 +1,4306 @@
+openapi: 3.0.0
+info:
+  title: MFT Gateway REST API
+  contact: {}
+  version: '1.0'
+servers:
+  - url: https://api.mftgateway.com
+    variables: {}
+paths:
+  /authorize:
+    post:
+      tags:
+        - Authorization
+      summary: Authorize
+      description: MFT Gateway authorization end-point. After successfully authorized, you will receive two tokens **api_token** and **refresh_token**. The **api_token** must be included in the **Authorization** header of every protected API request. The **refresh_token** can be used for re-authorization process without user password by using "Refresh Auth Token" end-point.
+      operationId: Authorize
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthorizeRequest'
+            example:
+              username: myemail@mydomain.com
+              password: Abc@1234
+        required: true
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '3343'
+                  example: '3343'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: keep-alive
+                  example: keep-alive
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Fri, 17 Jul 2020 06:00:32 GMT
+                  example: Fri, 17 Jul 2020 06:00:32 GMT
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SuccessfulAuthorization'
+              example:
+                api_token: <JWT_token>
+                refresh_token: <JWT_token>
+        '401':
+          description: Unauthorized
+          headers:
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '42'
+                  example: '42'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: keep-alive
+                  example: keep-alive
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Fri, 17 Jul 2020 06:07:19 GMT
+                  example: Fri, 17 Jul 2020 06:07:19 GMT
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/FailedAuthorization1'
+              example:
+                message: 'Authentication Failed: Bad credentials'
+      deprecated: false
+  /refresh-session:
+    post:
+      tags:
+        - Authorization
+      summary: Refresh Auth Token
+      description: This end-point can be used to re-authorize without entering user password, by using **refresh-token** received from initial authentication.
+      operationId: RefreshAuthToken
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshAuthTokenRequest'
+            example:
+              username: myemail@mydomain.com
+              refreshToken: refresh_token
+        required: true
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '3343'
+                  example: '3343'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: keep-alive
+                  example: keep-alive
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Fri, 17 Jul 2020 06:10:33 GMT
+                  example: Fri, 17 Jul 2020 06:10:33 GMT
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SuccessfulSessionRefresh'
+              example:
+                api_token: <JWT_token>
+                refresh_token: <JWT_token>
+        '500':
+          description: Internal Server Error
+          headers:
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '62'
+                  example: '62'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: keep-alive
+                  example: keep-alive
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Fri, 17 Jul 2020 06:11:58 GMT
+                  example: Fri, 17 Jul 2020 06:11:58 GMT
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/FailedSessionRefresh1'
+              example:
+                message: Error occurred while refreshing the user session
+      deprecated: false
+  /certificate:
+    get:
+      tags:
+        - Certificate
+      summary: List Certificates (Coming Soon)
+      description: |-
+        This API endpoint can be used to list **available certificates** on the MFT Gateway account.      
+
+        ----
+        **Optional Filters:**
+        - **certType**​ - Certificate type to filter. Allowed values: 'STATION', 'PARTNER', 'HTTPS', 'PARTNER_CHAIN' and 'HTTPS_CHAIN' Defaults to null (all certificates).
+      operationId: ListCertificates(ComingSoon)
+      parameters:
+        - name: Authorization
+          in: header
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: auth-token
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '455'
+                  example: '455'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: keep-alive
+                  example: keep-alive
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Mon, 04 Oct 2021 10:03:08 GMT
+                  example: Mon, 04 Oct 2021 10:03:08 GMT
+            x-amzn-RequestId:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: 21f054b3-6951-4e6f-be12-3ce547ba6f71
+                  example: 21f054b3-6951-4e6f-be12-3ce547ba6f71
+            x-amzn-Remapped-content-length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '455'
+                  example: '455'
+            x-amz-apigw-id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: GrWmCEA_IAMFssA=
+                  example: GrWmCEA_IAMFssA=
+            etag:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: W/"1c7-kegp9g7mgLnN+jcYWjE8O9GBgDI"
+                  example: W/"1c7-kegp9g7mgLnN+jcYWjE8O9GBgDI"
+            x-powered-by:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Express
+                  example: Express
+            X-Amzn-Trace-Id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Root=1-615ad159-6c170514211a9e0c654d0f5a;Sampled=0
+                  example: Root=1-615ad159-6c170514211a9e0c654d0f5a;Sampled=0
+            X-Cache:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Miss from cloudfront
+                  example: Miss from cloudfront
+            Via:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: 1.1 7950d01de2e02c18305e7cb8933f52f4.cloudfront.net (CloudFront)
+                  example: 1.1 7950d01de2e02c18305e7cb8933f52f4.cloudfront.net (CloudFront)
+            X-Amz-Cf-Pop:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: SIN2-C1
+                  example: SIN2-C1
+            X-Amz-Cf-Id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: vg2uPjLZOP9GnfOyGNLOyql7ygtepSsaF20Ep6WgBPLcEezVsE_iUw==
+                  example: vg2uPjLZOP9GnfOyGNLOyql7ygtepSsaF20Ep6WgBPLcEezVsE_iUw==
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SuccessResponse'
+                description: ''
+                example:
+                  - alias: f54967f4-23fb-4b1a-9759-ba6b94cd7922
+                    type: HTTPS
+                  - alias: 5208e1af-cd9e-4106-8cd0-04b1be74db1d
+                    type: PARTNER
+                  - alias: d710c1e7-9fe3-44fe-b68c-f5823668b698
+                    type: PARTNER
+                  - alias: 32ed186f-346e-4a7d-9b9b-562c0a510e54
+                    type: PARTNER
+                  - alias: f07b6f2e-ac1a-4499-994c-66f839671f8a
+                    type: PARTNER
+                  - alias: 48f358bb-f815-45ad-a5b8-11916ece0d88
+                    type: STATION
+                  - alias: 99f931e2-57dc-467a-805c-fbe1849b2908
+                    type: STATION
+              example:
+                - alias: f54967f4-23fb-4b1a-9759-ba6b94cd7922
+                  type: HTTPS
+                - alias: 5208e1af-cd9e-4106-8cd0-04b1be74db1d
+                  type: PARTNER
+                - alias: d710c1e7-9fe3-44fe-b68c-f5823668b698
+                  type: PARTNER
+                - alias: 32ed186f-346e-4a7d-9b9b-562c0a510e54
+                  type: PARTNER
+                - alias: f07b6f2e-ac1a-4499-994c-66f839671f8a
+                  type: PARTNER
+                - alias: 48f358bb-f815-45ad-a5b8-11916ece0d88
+                  type: STATION
+                - alias: 99f931e2-57dc-467a-805c-fbe1849b2908
+                  type: STATION
+      deprecated: false
+      security: []
+  /certificate/{alias}:
+    get:
+      tags:
+        - Certificate
+      summary: Retrieve Certificate Metadata (Coming Soon)
+      description: |-
+        This API endpoint can be used to retrieve the **metadata** of a certificate with the given certificate alias. 
+
+        ----
+      operationId: RetrieveCertificateMetadata(ComingSoon)
+      parameters:
+        - name: alias
+          in: path
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: f54967f4-23fb-4b1a-9759-ba6b94cd79222
+        - name: Authorization
+          in: header
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: auth-token
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '448'
+                  example: '448'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: keep-alive
+                  example: keep-alive
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Mon, 04 Oct 2021 10:14:48 GMT
+                  example: Mon, 04 Oct 2021 10:14:48 GMT
+            x-amzn-RequestId:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: 8a1d5075-fd35-42b8-9319-ba21bed46cbf
+                  example: 8a1d5075-fd35-42b8-9319-ba21bed46cbf
+            x-amzn-Remapped-content-length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '448'
+                  example: '448'
+            x-amz-apigw-id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: GrYT2FHfoAMFaKg=
+                  example: GrYT2FHfoAMFaKg=
+            etag:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: W/"1c0-NRYAauPVjgMJaq4S/ueY9PqIc0o"
+                  example: W/"1c0-NRYAauPVjgMJaq4S/ueY9PqIc0o"
+            x-powered-by:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Express
+                  example: Express
+            X-Amzn-Trace-Id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Root=1-615ad418-35b3de2838ce35102437d052;Sampled=0
+                  example: Root=1-615ad418-35b3de2838ce35102437d052;Sampled=0
+            X-Cache:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Miss from cloudfront
+                  example: Miss from cloudfront
+            Via:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: 1.1 1098c68725f26a6e79b4565dded7de39.cloudfront.net (CloudFront)
+                  example: 1.1 1098c68725f26a6e79b4565dded7de39.cloudfront.net (CloudFront)
+            X-Amz-Cf-Pop:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: SIN52-C2
+                  example: SIN52-C2
+            X-Amz-Cf-Id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: StqM6HHSOpfL6V6HSuqEqXHXYg7BxFTpQ8ZlpNcPwfy_21Ue5CYUHA==
+                  example: StqM6HHSOpfL6V6HSuqEqXHXYg7BxFTpQ8ZlpNcPwfy_21Ue5CYUHA==
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse1'
+              example:
+                alias: f54967f4-23fb-4b1a-9759-ba6b94cd7922
+                type: HTTPS
+                serial_number: 66c9fcf99bf8c0a39e2f0788a43e696365bca
+                subject_common_name: Amazon Root CA 1
+                subject_distinguish_name: CN=Amazon Root CA 1, O=Amazon, C=US
+                issuer_common_name: Amazon Root CA 1
+                issuer_distinguish_name: CN=Amazon Root CA 1, O=Amazon, C=US
+                valid_from: Tue May 26 00:00:00 UTC 2015
+                expiry: Sun Jan 17 00:00:00 UTC 2038
+                belongsTo:
+                  - Partner-01
+                  - Station_02
+        '404':
+          description: Not Found
+          headers:
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '40'
+                  example: '40'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: keep-alive
+                  example: keep-alive
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Mon, 04 Oct 2021 10:16:14 GMT
+                  example: Mon, 04 Oct 2021 10:16:14 GMT
+            x-amzn-RequestId:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: 0930d2d3-8799-4ef0-8bdd-4072d4f28b8f
+                  example: 0930d2d3-8799-4ef0-8bdd-4072d4f28b8f
+            x-amzn-Remapped-content-length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '40'
+                  example: '40'
+            x-amz-apigw-id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: GrYhRFaiIAMFyQA=
+                  example: GrYhRFaiIAMFyQA=
+            etag:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: W/"28-jiMQLcWIAlCRMRW9AJ/qXbsmoM0"
+                  example: W/"28-jiMQLcWIAlCRMRW9AJ/qXbsmoM0"
+            x-powered-by:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Express
+                  example: Express
+            X-Amzn-Trace-Id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Root=1-615ad46e-72db062f760791b57af5952b;Sampled=0
+                  example: Root=1-615ad46e-72db062f760791b57af5952b;Sampled=0
+            X-Cache:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Error from cloudfront
+                  example: Error from cloudfront
+            Via:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: 1.1 1098c68725f26a6e79b4565dded7de39.cloudfront.net (CloudFront)
+                  example: 1.1 1098c68725f26a6e79b4565dded7de39.cloudfront.net (CloudFront)
+            X-Amz-Cf-Pop:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: SIN52-C2
+                  example: SIN52-C2
+            X-Amz-Cf-Id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: 0St1uXbVhV0sNTIsjPw8uBW6e__osbvc5HlDq_mnAA5DyRbiqmdggg==
+                  example: 0St1uXbVhV0sNTIsjPw8uBW6e__osbvc5HlDq_mnAA5DyRbiqmdggg==
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse1'
+              example:
+                message: 'Unable to find certificate with alias: f54967f4-23fb-4b1a-9759-ba6b94cd79222'
+      deprecated: false
+      security: []
+  /message/submit:
+    post:
+      tags:
+        - Message
+      summary: Send Message
+      description: |-
+        Send (enqueue) an AS2 message with a single or multiple attachments.
+
+        ----
+        Request Headers
+        - **Authorization** - Authorization header with auth token.
+        - **AS2-From** - Station AS2 identifier which sends the message.
+        - **AS2-To** - Partner AS2 identifier which intends to receive the message.
+        - **Content-Type** - Content type of the message payload. For multiple attachmets, content type should be **multipart/form-data** with valid form content.
+        - **Subject (optional)** - Subject of the message. If not specified, the default subject configured for the intended partner will be applied.
+        - **Attachment-Name (optional)** - Name of the message attachment. Only applicable when sending a message with single attachment.
+
+        Response Headers
+        - **Link** - An absolute URL to the AS2 message which will be created after the outgoing message entry is processed. Therefore the resource in this URL may not be available immediately after the response for this API call is returned. It would be better to wait around 5 to 10 seconds before querying for the resource represented in the ​**Link**​ header value. 
+          
+        Similar to the MFT Gateway web dashboard​, this simply places the newly submitted message into a queue, in a **queued**(to-be-sent) state; it may take several seconds before the message actually gets sent out.
+
+        Additionally, if the actual send action fails, the message will not appear under the **outbox**; and the URL previously returned in the **​Link**​ header would no longer be valid.    
+        In such cases it is advised to check **outbox/failed** and **outbox/queued** to find out the current status of the message.
+      operationId: SendMessage
+      parameters:
+        - name: Authorization
+          in: header
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: auth-token
+        - name: AS2-From
+          in: header
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: MyStation
+        - name: AS2-To
+          in: header
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: MyPartner
+        - name: Subject
+          in: header
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: Test message from MFTG API
+        - name: Attachment-Name
+          in: header
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: Attachment.txt
+        - name: Content-Type
+          in: header
+          description: ''
+          required: true
+          style: simple
+          schema:
+            enum:
+              - text/plain
+            type: string
+            example: text/plain
+      requestBody:
+        content:
+          multipart/form-data:
+            # encoding: {}
+            schema:
+              required:
+                - File
+              type: object
+              properties:
+                File:
+                  type: string
+                  format: binary
+        required: false
+      responses:
+        '202':
+          description: Accepted
+          headers:
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '41'
+                  example: '41'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: keep-alive
+                  example: keep-alive
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Wed, 29 Jul 2020 04:57:13 GMT
+                  example: Wed, 29 Jul 2020 04:57:13 GMT
+            link:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: https://api.mftgateway.com/message/outbox/<159599863352334660@mftgateway.com>
+                  example: https://api.mftgateway.com/message/outbox/<159599863352334660@mftgateway.com>
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse2'
+              example:
+                message: Message queued successfully
+        '422':
+          description: Unprocessable Entity (WebDAV) (RFC 4918)
+          headers:
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '65'
+                  example: '65'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: keep-alive
+                  example: keep-alive
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Wed, 29 Jul 2020 04:55:24 GMT
+                  example: Wed, 29 Jul 2020 04:55:24 GMT
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/UnprocessableRequest1'
+              example:
+                message: 'Unable to find partner with AS2 identifier: MyPartner'
+      deprecated: false
+      security: []
+  /message/inbox/{as2_message_id}/markUnread:
+    post:
+      tags:
+        - Message
+      summary: Mark Received Message As UnRead
+      description: This end-point can be used to mark **received** AS2 message as API unread. Please note that the result of this operation will not be affected on the MFT Gateway dashboard.
+      operationId: MarkReceivedMessageAsUnRead
+      parameters:
+        - name: as2_message_id
+          in: path
+          description: AS2 message identifier
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: <1594723844328@mftgateway.com>
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '82'
+                  example: '82'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: keep-alive
+                  example: keep-alive
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Tue, 28 Jul 2020 06:55:14 GMT
+                  example: Tue, 28 Jul 2020 06:55:14 GMT
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse2'
+              example:
+                message: Successfully marked message <1594723844329@mftgateway.com> as unread
+        '404':
+          description: Not Found
+          headers:
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '31'
+                  example: '31'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: keep-alive
+                  example: keep-alive
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Tue, 28 Jul 2020 06:55:54 GMT
+                  example: Tue, 28 Jul 2020 06:55:54 GMT
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/MessageNotFound1'
+              example:
+                message: Message not found
+      deprecated: false
+  /message/inbox/delete:
+    post:
+      tags:
+        - Message
+      summary: Batch Delete Inbox (Received) Messages
+      description: This API endpoint can be used to delete multiple **inbox** messages as a batch. Endpoint supports upto 100 messages per API call.
+      operationId: BatchDeleteInbox(Received)Messages
+      parameters:
+        - name: Authorization
+          in: header
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: auth-token
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchDeleteInboxReceivedMessagesRequest'
+            example:
+              as2MessageIds:
+                - <16206212538784368@mftgateway.com>
+                - <16094169443904964@mftgateway.com>
+        required: true
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '107'
+                  example: '107'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: keep-alive
+                  example: keep-alive
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Mon, 10 May 2021 10:40:22 GMT
+                  example: Mon, 10 May 2021 10:40:22 GMT
+            x-amzn-RequestId:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: 38cbdf44-a09d-47cc-9094-0176d879cad9
+                  example: 38cbdf44-a09d-47cc-9094-0176d879cad9
+            x-amzn-Remapped-content-length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '107'
+                  example: '107'
+            x-amz-apigw-id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: fG8PHF3oIAMFyHQ=
+                  example: fG8PHF3oIAMFyHQ=
+            etag:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: W/"6b-f296w+IZmCmqghK+DuRDDTRiBFg"
+                  example: W/"6b-f296w+IZmCmqghK+DuRDDTRiBFg"
+            x-powered-by:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Express
+                  example: Express
+            X-Amzn-Trace-Id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Root=1-60990d93-4a4a30fd3ebc049c3086c0ba;Sampled=0
+                  example: Root=1-60990d93-4a4a30fd3ebc049c3086c0ba;Sampled=0
+            X-Cache:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Miss from cloudfront
+                  example: Miss from cloudfront
+            Via:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: 1.1 884565e44bd03047bbadc5b86c50509d.cloudfront.net (CloudFront)
+                  example: 1.1 884565e44bd03047bbadc5b86c50509d.cloudfront.net (CloudFront)
+            X-Amz-Cf-Pop:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: SIN5-C1
+                  example: SIN5-C1
+            X-Amz-Cf-Id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: 7i0H2Gub0LRJKgtEudrkpnuYNjG6Tq2DHVDNVMAFwikQiFDGBqyYvA==
+                  example: 7i0H2Gub0LRJKgtEudrkpnuYNjG6Tq2DHVDNVMAFwikQiFDGBqyYvA==
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse4'
+              example:
+                deleted:
+                  - <16206212538784368@mftgateway.com>
+                  - <16094169443904964@mftgateway.com>
+        '404':
+          description: Not Found
+          headers:
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '37'
+                  example: '37'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: keep-alive
+                  example: keep-alive
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Mon, 10 May 2021 10:42:04 GMT
+                  example: Mon, 10 May 2021 10:42:04 GMT
+            x-amzn-RequestId:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: 9e86f0d5-3109-488a-8e5d-e7ea34e8d486
+                  example: 9e86f0d5-3109-488a-8e5d-e7ea34e8d486
+            x-amzn-Remapped-content-length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '37'
+                  example: '37'
+            x-amz-apigw-id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: fG8faHh9IAMF_5A=
+                  example: fG8faHh9IAMF_5A=
+            etag:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: W/"25-1Yv1LlXrF2guC7TgKCHGcjS2CEI"
+                  example: W/"25-1Yv1LlXrF2guC7TgKCHGcjS2CEI"
+            x-powered-by:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Express
+                  example: Express
+            X-Amzn-Trace-Id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Root=1-60990dfc-6f04376234c390890cd5b036;Sampled=0
+                  example: Root=1-60990dfc-6f04376234c390890cd5b036;Sampled=0
+            X-Cache:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Error from cloudfront
+                  example: Error from cloudfront
+            Via:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: 1.1 884565e44bd03047bbadc5b86c50509d.cloudfront.net (CloudFront)
+                  example: 1.1 884565e44bd03047bbadc5b86c50509d.cloudfront.net (CloudFront)
+            X-Amz-Cf-Pop:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: SIN5-C1
+                  example: SIN5-C1
+            X-Amz-Cf-Id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: PFJd8kZfdP0rYmotGQBT25LXGtwCfHTn8FcWjCzxci8ydTag41GRgw==
+                  example: PFJd8kZfdP0rYmotGQBT25LXGtwCfHTn8FcWjCzxci8ydTag41GRgw==
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse1'
+              example:
+                message: Unable to find messages
+      deprecated: false
+      security: []
+  /message/outbox/delete:
+    post:
+      tags:
+        - Message
+      summary: Batch Delete Outbox (Sent/Queued/Failed) Messages
+      description: This API endpoint can be used to delete multiple **outbox (Sent/Queued/Failed)** messages as a batch. Endpoint supports upto 100 messages per API call.
+      operationId: BatchDeleteOutbox(Sent/Queued/Failed)Messages
+      parameters:
+        - name: Authorization
+          in: header
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: auth-token
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchDeleteOutboxSentQueuedFailedMessagesRequest'
+            example:
+              as2MessageIds:
+                - <16206212538784368@mftgateway.com>
+                - <16094169443904964@mftgateway.com>
+        required: true
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '107'
+                  example: '107'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: keep-alive
+                  example: keep-alive
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Mon, 10 May 2021 10:40:22 GMT
+                  example: Mon, 10 May 2021 10:40:22 GMT
+            x-amzn-RequestId:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: 38cbdf44-a09d-47cc-9094-0176d879cad9
+                  example: 38cbdf44-a09d-47cc-9094-0176d879cad9
+            x-amzn-Remapped-content-length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '107'
+                  example: '107'
+            x-amz-apigw-id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: fG8PHF3oIAMFyHQ=
+                  example: fG8PHF3oIAMFyHQ=
+            etag:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: W/"6b-f296w+IZmCmqghK+DuRDDTRiBFg"
+                  example: W/"6b-f296w+IZmCmqghK+DuRDDTRiBFg"
+            x-powered-by:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Express
+                  example: Express
+            X-Amzn-Trace-Id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Root=1-60990d93-4a4a30fd3ebc049c3086c0ba;Sampled=0
+                  example: Root=1-60990d93-4a4a30fd3ebc049c3086c0ba;Sampled=0
+            X-Cache:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Miss from cloudfront
+                  example: Miss from cloudfront
+            Via:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: 1.1 884565e44bd03047bbadc5b86c50509d.cloudfront.net (CloudFront)
+                  example: 1.1 884565e44bd03047bbadc5b86c50509d.cloudfront.net (CloudFront)
+            X-Amz-Cf-Pop:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: SIN5-C1
+                  example: SIN5-C1
+            X-Amz-Cf-Id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: 7i0H2Gub0LRJKgtEudrkpnuYNjG6Tq2DHVDNVMAFwikQiFDGBqyYvA==
+                  example: 7i0H2Gub0LRJKgtEudrkpnuYNjG6Tq2DHVDNVMAFwikQiFDGBqyYvA==
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse4'
+              example:
+                deleted:
+                  - <16206212538784368@mftgateway.com>
+                  - <16094169443904964@mftgateway.com>
+        '404':
+          description: Not Found
+          headers:
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '37'
+                  example: '37'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: keep-alive
+                  example: keep-alive
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Mon, 10 May 2021 10:42:04 GMT
+                  example: Mon, 10 May 2021 10:42:04 GMT
+            x-amzn-RequestId:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: 9e86f0d5-3109-488a-8e5d-e7ea34e8d486
+                  example: 9e86f0d5-3109-488a-8e5d-e7ea34e8d486
+            x-amzn-Remapped-content-length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '37'
+                  example: '37'
+            x-amz-apigw-id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: fG8faHh9IAMF_5A=
+                  example: fG8faHh9IAMF_5A=
+            etag:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: W/"25-1Yv1LlXrF2guC7TgKCHGcjS2CEI"
+                  example: W/"25-1Yv1LlXrF2guC7TgKCHGcjS2CEI"
+            x-powered-by:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Express
+                  example: Express
+            X-Amzn-Trace-Id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Root=1-60990dfc-6f04376234c390890cd5b036;Sampled=0
+                  example: Root=1-60990dfc-6f04376234c390890cd5b036;Sampled=0
+            X-Cache:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Error from cloudfront
+                  example: Error from cloudfront
+            Via:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: 1.1 884565e44bd03047bbadc5b86c50509d.cloudfront.net (CloudFront)
+                  example: 1.1 884565e44bd03047bbadc5b86c50509d.cloudfront.net (CloudFront)
+            X-Amz-Cf-Pop:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: SIN5-C1
+                  example: SIN5-C1
+            X-Amz-Cf-Id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: PFJd8kZfdP0rYmotGQBT25LXGtwCfHTn8FcWjCzxci8ydTag41GRgw==
+                  example: PFJd8kZfdP0rYmotGQBT25LXGtwCfHTn8FcWjCzxci8ydTag41GRgw==
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse1'
+              example:
+                message: Unable to find messages
+      deprecated: false
+      security: []
+  /message/inbox/{as2MessageId}:
+    delete:
+      tags:
+        - Message
+      summary: Delete Inbox (Received) Message
+      description: This API endpoint can be used to delete an **inbox** message.
+      operationId: DeleteInbox(Received)Message
+      parameters:
+        - name: as2MessageId
+          in: path
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: <1696315973.0.1620624078702@as2gateway.com>
+        - name: Authorization
+          in: header
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: auth-token
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '57'
+                  example: '57'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: keep-alive
+                  example: keep-alive
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Tue, 11 May 2021 11:44:40 GMT
+                  example: Tue, 11 May 2021 11:44:40 GMT
+            x-amzn-RequestId:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: ff2883a0-e710-4a13-abae-c5f01bb18569
+                  example: ff2883a0-e710-4a13-abae-c5f01bb18569
+            x-amzn-Remapped-content-length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '57'
+                  example: '57'
+            x-amz-apigw-id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: fKYmXHRUoAMFfzw=
+                  example: fKYmXHRUoAMFfzw=
+            etag:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: W/"39-BfBaSSX+x/2judv55KgZCg5/06U"
+                  example: W/"39-BfBaSSX+x/2judv55KgZCg5/06U"
+            x-powered-by:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Express
+                  example: Express
+            X-Amzn-Trace-Id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Root=1-609a6e28-777618447d1aa2db4686d45f;Sampled=0
+                  example: Root=1-609a6e28-777618447d1aa2db4686d45f;Sampled=0
+            X-Cache:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Miss from cloudfront
+                  example: Miss from cloudfront
+            Via:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: 1.1 0b3572829f6f42309f3adfa694398770.cloudfront.net (CloudFront)
+                  example: 1.1 0b3572829f6f42309f3adfa694398770.cloudfront.net (CloudFront)
+            X-Amz-Cf-Pop:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: SIN5-C1
+                  example: SIN5-C1
+            X-Amz-Cf-Id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: TvMwYJL_HJ1ZOgsLTgIBmCjpYvezn68OEhNoJpMLtrT2ViKGFPgiSg==
+                  example: TvMwYJL_HJ1ZOgsLTgIBmCjpYvezn68OEhNoJpMLtrT2ViKGFPgiSg==
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse6'
+              example:
+                deleted: <16206212538784367@mftgateway.com>
+        '404':
+          description: Not Found
+          headers:
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '37'
+                  example: '37'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: keep-alive
+                  example: keep-alive
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Tue, 11 May 2021 11:43:00 GMT
+                  example: Tue, 11 May 2021 11:43:00 GMT
+            x-amzn-RequestId:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: 3cbdd546-0486-4fd4-8e87-ab0aa137da42
+                  example: 3cbdd546-0486-4fd4-8e87-ab0aa137da42
+            x-amzn-Remapped-content-length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '37'
+                  example: '37'
+            x-amz-apigw-id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: fKYWqHnfIAMFQJw=
+                  example: fKYWqHnfIAMFQJw=
+            etag:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: W/"25-1Yv1LlXrF2guC7TgKCHGcjS2CEI"
+                  example: W/"25-1Yv1LlXrF2guC7TgKCHGcjS2CEI"
+            x-powered-by:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Express
+                  example: Express
+            X-Amzn-Trace-Id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Root=1-609a6dc4-27638efa410e9ef90cef68c3;Sampled=0
+                  example: Root=1-609a6dc4-27638efa410e9ef90cef68c3;Sampled=0
+            X-Cache:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Error from cloudfront
+                  example: Error from cloudfront
+            Via:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: 1.1 e869415928b7de75c30c1dc3da361401.cloudfront.net (CloudFront)
+                  example: 1.1 e869415928b7de75c30c1dc3da361401.cloudfront.net (CloudFront)
+            X-Amz-Cf-Pop:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: SIN5-C1
+                  example: SIN5-C1
+            X-Amz-Cf-Id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: _1rAkbpVTSEz0zn0VzIH8LOzQQskOAn0SJ3UYA51l5BZeDn3tUjaWw==
+                  example: _1rAkbpVTSEz0zn0VzIH8LOzQQskOAn0SJ3UYA51l5BZeDn3tUjaWw==
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse1'
+              example:
+                message: Unable to find message
+      deprecated: false
+      security: []
+    get:
+      tags:
+        - Message
+      summary: Retrieve Inbox (Received) Message
+      description: |-
+        This API endpoint can be used to retrieve **received** message with optional **markAsRead**(Boolean) query param. 
+
+        ----
+        If **markAsRead** query param is set to ​true​, the message will be "marked as read" upon retrieval. Defaults to true.   
+        Any message list queries with **fetchAll** query param set to **false**, will not return the corresponding message afterwards. You can combine this and the **fetchAll** query parameter, 
+        to ensure one-time processing of received messages. (Note that this marking will be applied only at **API scope**; "marked as read" messages may still appear as unread on 
+        the MFT Gateway webapp inbox.)
+      operationId: RetrieveInbox(Received)Message
+      parameters:
+        - name: as2MessageId
+          in: path
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: <158719527.1469.1594924294697@as2gateway.com>
+        - name: Authorization
+          in: header
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: auth_token
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '2551'
+                  example: '2551'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: keep-alive
+                  example: keep-alive
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Tue, 28 Jul 2020 10:29:35 GMT
+                  example: Tue, 28 Jul 2020 10:29:35 GMT
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse13'
+              example:
+                id: 10959001878639
+                as2MessageId: <158719527.1469.1594924294698@as2gateway.com>
+                incoming: true
+                msgStatus: Received
+                mdnStatus: Sent Signed MDN
+                receiverAS2Id: MyStation
+                senderAS2Id: MyPartner
+                subject: AS2 Message from MyPartner
+                failures: 0
+                attachmentPaths:
+                  - AS2/files/MyStation/MyPartner/inbox/1594924300560-333/Attachment.raw
+                compressed: false
+                signed: true
+                encrypted: true
+                mic: cxbzphztud4C6z8+lJa0R9V6uUw=, sha1
+                micMatches: false
+                transportStatusReceived: 0
+                userAgent: AdroitLogic UltraESB-X
+                timestamp: 1594924304442
+                apiFetched: true
+                transportHeaders:
+                  CloudFront-Viewer-Country: US
+                  CloudFront-Forwarded-Proto: https
+                  CloudFront-Is-Tablet-Viewer: 'false'
+                  AS2-From: MyPartner
+                  User-Agent: AdroitLogic UltraESB-X
+                  Accept-Encoding: gzip
+                  Content-Transfer-Encoding: binary
+                  Message-ID: <158719527.1469.1594924294698@as2gateway.com>
+                  Disposition-Notification-Options: signed-receipt-protocol=optional,pkcs7-signature; signed-receipt-micalg=optional,sha1,md5
+                  X-Amz-Cf-Id: AmhW08tMTpI8DJrXnIuFHGiUHspdX_GZ4GM2qW93SDi4dycpwkjxMw==
+                  AS2-To: MyStation
+                  CloudFront-Is-Desktop-Viewer: 'true'
+                  Content-Type: application/octet-stream; name="smime.p7m"; smime-type=enveloped-data
+                  CloudFront-Is-Mobile-Viewer: 'false'
+                  X-Forwarded-Proto: https
+                  CloudFront-Is-SmartTV-Viewer: 'false'
+                  Disposition-Notification-To: mystation@mymail.com
+                  AS2-Version: '1.1'
+                  Host: service.mftgateway.com
+                  From: mystation@mymail.com
+                  X-Forwarded-Port: '443'
+                  MIME-Version: '1.0'
+                  Subject: 'AS2 Message from: MyPartner'
+                  X-Amzn-Trace-Id: Root=1-5f109d08-0fec3714afc0950ce8508fd4
+                  Via: 1.1 f7a968b55c3516da72549b98f99704a4.cloudfront.net (CloudFront)
+                  X-Forwarded-For: 52.204.119.191, 130.176.98.78
+                mdnMessage:
+                  mdnId: <1870054092.0.1594924307180@mftgateway.com>
+                  messageId: 10959001878639
+                  as2MessageId: <158719527.1469.1594924294698@as2gateway.com>
+                  disposition: automatic-action/MDN-sent-automatically; processed
+                  humanMessage: "MDN for Message-ID: <158719527.1469.1594924294698@as2gateway.com>\r\nFrom: MyPartner\r\nTo: MyStation\r\nReceived on: Thu Jul 16 18:31:46 UTC 2020\r\nStatus: processed\r\nComment: This is not a guarantee that the message has been completely processed or understood by the receiving translator.\r\nPowered by MFT Gateway\r\n"
+                  rawMdnS3Key: AS2/raw-mdn/incoming/10959001878639/mdn.raw
+                  mic: cxbzphztud4C6z8+lJa0R9V6uUw=, sha1
+                  signed: true
+                  incoming: false
+                  status: Sent Signed MDN
+                  timestamp: 1594924307980
+        '404':
+          description: Not Found
+          headers:
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '31'
+                  example: '31'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: keep-alive
+                  example: keep-alive
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Tue, 28 Jul 2020 10:30:36 GMT
+                  example: Tue, 28 Jul 2020 10:30:36 GMT
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse1'
+              example:
+                message: Message not found
+      deprecated: false
+      security: []
+  /message/outbox/{as2MessageId}:
+    delete:
+      tags:
+        - Message
+      summary: Delete Outbox (Sent/Queued/Failed) Message
+      description: This API endpoint can be used to delete a **outbox (Sent/Queued/Failed)** message.
+      operationId: DeleteOutbox(Sent/Queued/Failed)Message
+      parameters:
+        - name: as2MessageId
+          in: path
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: <16206212538784368@mftgateway.com>
+        - name: Authorization
+          in: header
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: auth-token
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '57'
+                  example: '57'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: keep-alive
+                  example: keep-alive
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Tue, 11 May 2021 11:44:40 GMT
+                  example: Tue, 11 May 2021 11:44:40 GMT
+            x-amzn-RequestId:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: ff2883a0-e710-4a13-abae-c5f01bb18569
+                  example: ff2883a0-e710-4a13-abae-c5f01bb18569
+            x-amzn-Remapped-content-length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '57'
+                  example: '57'
+            x-amz-apigw-id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: fKYmXHRUoAMFfzw=
+                  example: fKYmXHRUoAMFfzw=
+            etag:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: W/"39-BfBaSSX+x/2judv55KgZCg5/06U"
+                  example: W/"39-BfBaSSX+x/2judv55KgZCg5/06U"
+            x-powered-by:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Express
+                  example: Express
+            X-Amzn-Trace-Id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Root=1-609a6e28-777618447d1aa2db4686d45f;Sampled=0
+                  example: Root=1-609a6e28-777618447d1aa2db4686d45f;Sampled=0
+            X-Cache:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Miss from cloudfront
+                  example: Miss from cloudfront
+            Via:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: 1.1 0b3572829f6f42309f3adfa694398770.cloudfront.net (CloudFront)
+                  example: 1.1 0b3572829f6f42309f3adfa694398770.cloudfront.net (CloudFront)
+            X-Amz-Cf-Pop:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: SIN5-C1
+                  example: SIN5-C1
+            X-Amz-Cf-Id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: TvMwYJL_HJ1ZOgsLTgIBmCjpYvezn68OEhNoJpMLtrT2ViKGFPgiSg==
+                  example: TvMwYJL_HJ1ZOgsLTgIBmCjpYvezn68OEhNoJpMLtrT2ViKGFPgiSg==
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse6'
+              example:
+                deleted: <16206212538784367@mftgateway.com>
+        '404':
+          description: Not Found
+          headers:
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '37'
+                  example: '37'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: keep-alive
+                  example: keep-alive
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Tue, 11 May 2021 11:43:00 GMT
+                  example: Tue, 11 May 2021 11:43:00 GMT
+            x-amzn-RequestId:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: 3cbdd546-0486-4fd4-8e87-ab0aa137da42
+                  example: 3cbdd546-0486-4fd4-8e87-ab0aa137da42
+            x-amzn-Remapped-content-length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '37'
+                  example: '37'
+            x-amz-apigw-id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: fKYWqHnfIAMFQJw=
+                  example: fKYWqHnfIAMFQJw=
+            etag:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: W/"25-1Yv1LlXrF2guC7TgKCHGcjS2CEI"
+                  example: W/"25-1Yv1LlXrF2guC7TgKCHGcjS2CEI"
+            x-powered-by:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Express
+                  example: Express
+            X-Amzn-Trace-Id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Root=1-609a6dc4-27638efa410e9ef90cef68c3;Sampled=0
+                  example: Root=1-609a6dc4-27638efa410e9ef90cef68c3;Sampled=0
+            X-Cache:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Error from cloudfront
+                  example: Error from cloudfront
+            Via:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: 1.1 e869415928b7de75c30c1dc3da361401.cloudfront.net (CloudFront)
+                  example: 1.1 e869415928b7de75c30c1dc3da361401.cloudfront.net (CloudFront)
+            X-Amz-Cf-Pop:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: SIN5-C1
+                  example: SIN5-C1
+            X-Amz-Cf-Id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: _1rAkbpVTSEz0zn0VzIH8LOzQQskOAn0SJ3UYA51l5BZeDn3tUjaWw==
+                  example: _1rAkbpVTSEz0zn0VzIH8LOzQQskOAn0SJ3UYA51l5BZeDn3tUjaWw==
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse1'
+              example:
+                message: Unable to find message
+      deprecated: false
+      security: []
+    get:
+      tags:
+        - Message
+      summary: Retrieve Outbox (Sent/Queued/Failed/Incomplete) Message
+      description: This API endpoint can be used to retrieve **outbox (sent/queued/failed/incomplete)** message by AS2 message identifier.
+      operationId: RetrieveOutbox(Sent/Queued/Failed/Incomplete)Message
+      parameters:
+        - name: as2MessageId
+          in: path
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: <159592985268202051@mftgateway.com>
+        - name: Authorization
+          in: header
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: auth_token
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '1918'
+                  example: '1918'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: keep-alive
+                  example: keep-alive
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Tue, 28 Jul 2020 10:38:11 GMT
+                  example: Tue, 28 Jul 2020 10:38:11 GMT
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse14'
+              example:
+                id: 159592985268293700
+                as2MessageId: <159592985268202050@mftgateway.com>
+                incoming: false
+                msgStatus: Sent
+                mdnStatus: Received; MDN Signature Verified
+                receiverAS2Id: MyPartner
+                senderAS2Id: MyStation
+                subject: Test Message from API
+                attachmentPaths:
+                  - AS2/files/MyStation/MyPartner/outbox/1595929852764-479/Attachment.raw
+                compressed: false
+                signed: true
+                encrypted: true
+                mic: rx3QMbPGeKtkoubnmibSxBbe9Gs=, sha1
+                micMatches: true
+                transportStatusReceived: 200
+                timestamp: 1595929857954
+                apiFetched: false
+                transportHeaders:
+                  AS2-From: MyStation
+                  User-Agent: MFT Gateway
+                  Disposition-Notification-To: mystation@mymail.com
+                  AS2-Version: '1.1'
+                  From: mystation@mymail.com
+                  Message-Id: <159592985268202050@mftgateway.com>
+                  Content-Transfer-Encoding: binary
+                  AS2-To: MyPartner
+                  Disposition-Notification-Options: signed-receipt-protocol=required,pkcs7-signature; signed-receipt-micalg=required,sha1,md5
+                  Subject: Test Message from API
+                  MIME-Version: '1.0'
+                  Content-Type: application/octet-stream; name="smime.p7m"; smime-type=enveloped-data
+                mdnMessage:
+                  mdnId: <1129007699.17286.1595929857998@as2gateway.com>
+                  messageId: 159592985268293700
+                  as2MessageId: <159592985268202050@mftgateway.com>
+                  disposition: automatic-action/MDN-sent-automatically;processed
+                  humanMessage: "MDN for Message-ID: <159592985268202050@mftgateway.com>\r\nFrom: MyStation\r\nTo: MyPartner\r\nReceived on: Tue Jul 28 09:50:57 UTC 2020\r\nStatus: processed\r\nComment: This is not a guarantee that the message has been completely processed or understood by the receiving translator\r\nPowered by the AdroitLogic UltraESB-X (https://www.adroitlogic.com)\r\n"
+                  rawMdnS3Key: AS2/raw-mdn/incoming/159592985268293700/mdn.raw
+                  mic: rx3QMbPGeKtkoubnmibSxBbe9Gs=, sha1
+                  signed: true
+                  incoming: true
+                  status: Received; MDN Signature Verified
+                  timestamp: 1595929858171
+        '404':
+          description: Not Found
+          headers:
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '31'
+                  example: '31'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: keep-alive
+                  example: keep-alive
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Tue, 28 Jul 2020 10:38:37 GMT
+                  example: Tue, 28 Jul 2020 10:38:37 GMT
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse1'
+              example:
+                message: Message not found
+      deprecated: false
+      security: []
+  /message/inbox:
+    get:
+      tags:
+        - Message
+      summary: List Received Messages
+      description: |-
+        This API endpoint can be used to list **received** messages with **optional** filters as **query** parametes.      
+
+        ----
+        **General filters:** Can be applied along with other filters(primary/secondary) without any restriction
+        - **sortDir**​ - Sort direction. Allowed values are **​asc​** and **​desc​**. Defaults to ​desc​.
+        - **pageOffset**​ - Page number. An integer value greater than or equal to zero is accepted. Default is zero.
+        - **pageLength​** - Length of a page. An integer value greater than or equal to 1 and less than or equal to 100 is accepted. Default is 10.
+        - **fetchAll** - Fetch all messages including messages already been "marked as read" within the **API scope**. Defaults to false.
+
+        **Primary filters:** Have higher precedence over secondary files. If apply both primary and secondary filters in a single API request, **secondary filters** will be **ignored**.
+        - **partnerAS2Id​** - AS2 identifier of the AS2 Partner that sent/received these messages
+        - **stationAS2Id​** - AS2 identifier of the AS2 Station that received/sent these messages
+
+        **Secondary filters:** Can apply **single secondary filter per API request**. Secondary filters will be applied in the listed precedence. If apply more than one secondary filter in a single API request, **the highest precedence** secondary filter will be applied and the rest will be ignored.
+        - **as2MessageId**​​ - ID of the required AS2 message
+        - **subject​** - Any subject string, to filter messages against
+      operationId: ListReceivedMessages
+      parameters:
+        - name: Authorization
+          in: header
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: auth_token
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '344'
+                  example: '344'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: keep-alive
+                  example: keep-alive
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Tue, 28 Jul 2020 05:16:12 GMT
+                  example: Tue, 28 Jul 2020 05:16:12 GMT
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse8'
+              example:
+                messages:
+                  - <15947211062750@mftgateway.com>
+                  - <15947210997311@mftgateway.com>
+                  - <15947210989114@mftgateway.com>
+                  - <15947210979767@mftgateway.com>
+                  - <15947210969966@mftgateway.com>
+                  - <15947210950640@mftgateway.com>
+                  - <15947210941011@mftgateway.com>
+      deprecated: false
+      security: []
+  /message/outbox:
+    get:
+      tags:
+        - Message
+      summary: List Sent Messages
+      description: |-
+        This API endpoint can be used to list **successfully sent** messages with **optional** filters as **query** parametes.      
+
+        ----
+        **General filters:** Can be applied along with other filters(primary/secondary) without any restriction
+        - **sortDir**​ - Sort direction. Allowed values are **​asc​** and **​desc​**. Defaults to ​desc​.
+        - **pageOffset**​ - Page number. An integer value greater than or equal to zero is accepted. Default is zero.
+        - **pageLength​** - Length of a page. An integer value greater than or equal to 1 and less than or equal to 100 is accepted. Default is 10.
+
+        **Primary filters:** Have higher precedence over secondary files. If apply both primary and secondary filters in a single API request, **secondary filters** will be **ignored**.
+        - **partnerAS2Id​** - AS2 identifier of the AS2 Partner that sent/received these messages
+        - **stationAS2Id​** - AS2 identifier of the AS2 Station that received/sent these messages
+
+        **Secondary filters:** Can apply **single secondary filter per API request**. Secondary filters will be applied in the listed precedence. If apply more than one secondary filter in a single API request, **the highest precedence** secondary filter will be applied and the rest will be ignored.
+        - **as2MessageId**​​ - ID of the required AS2 message
+        - **subject​** - Any subject string, to filter messages against
+      operationId: ListSentMessages
+      parameters:
+        - name: Authorization
+          in: header
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: auth_token
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '374'
+                  example: '374'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: keep-alive
+                  example: keep-alive
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Tue, 28 Jul 2020 11:49:19 GMT
+                  example: Tue, 28 Jul 2020 11:49:19 GMT
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse8'
+              example:
+                messages:
+                  - <460176392903103@mftgateway.com>
+                  - <460176392903204@mftgateway.com>
+                  - <460176392903403@mftgateway.com>
+                  - <460176392905201@mftgateway.com>
+                  - <460176392913203@mftgateway.com>
+      deprecated: false
+      security: []
+  /message/outbox/queued:
+    get:
+      tags:
+        - Message
+      summary: List Queued Messages
+      description: |-
+        This API endpoint can be used to list **queued(pending-send)** messages with **optional** filters as **query** parametes.   
+          
+        ----
+        **General filters:** Can be applied along with other filters(primary/secondary) without any restriction
+        - **sortDir**​ - Sort direction. Allowed values are **​asc​** and **​desc​**. Defaults to ​desc​.
+        - **pageOffset**​ - Page number. An integer value greater than or equal to zero is accepted. Default is zero.
+        - **pageLength​** - Length of a page. An integer value greater than or equal to 1 and less than or equal to 100 is accepted. Default is 10.
+
+        **Primary filters:** Have higher precedence over secondary files. If apply both primary and secondary filters in a single API request, **secondary filters** will be **ignored**.
+        - **partnerAS2Id​** - AS2 identifier of the AS2 Partner that sent/received these messages
+        - **stationAS2Id​** - AS2 identifier of the AS2 Station that received/sent these messages
+
+        **Secondary filters:** Can apply **single secondary filter per API request**. Secondary filters will be applied in the listed precedence. If apply more than one secondary filter in a single API request, **the highest precedence** secondary filter will be applied and the rest will be ignored.
+        - **as2MessageId**​​ - ID of the required AS2 message
+        - **subject​** - Any subject string, to filter messages against
+      operationId: ListQueuedMessages
+      parameters:
+        - name: Authorization
+          in: header
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: auth_token
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '344'
+                  example: '344'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: keep-alive
+                  example: keep-alive
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Tue, 28 Jul 2020 06:42:02 GMT
+                  example: Tue, 28 Jul 2020 06:42:02 GMT
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse8'
+              example:
+                messages:
+                  - <15947238429461@mftgateway.com>
+                  - <15947238424772@mftgateway.com>
+                  - <15947238415954@mftgateway.com>
+                  - <15947238398931@mftgateway.com>
+                  - <15947238397230@mftgateway.com>
+                  - <15947238396693@mftgateway.com>
+      deprecated: false
+      security: []
+  /message/outbox/failed:
+    get:
+      tags:
+        - Message
+      summary: List Failed Messages
+      description: |-
+        This API endpoint can be used to list **send failed** messages with **optional** filters as **query** parametes. 
+          
+        ----
+        **General filters:** Can be applied along with other filters(primary/secondary) without any restriction
+        - **sortDir**​ - Sort direction. Allowed values are **​asc​** and **​desc​**. Defaults to ​desc​.
+        - **pageOffset**​ - Page number. An integer value greater than or equal to zero is accepted. Default is zero.
+        - **pageLength​** - Length of a page. An integer value greater than or equal to 1 and less than or equal to 100 is accepted. Default is 10.
+
+        **Primary filters:** Have higher precedence over secondary files. If apply both primary and secondary filters in a single API request, **secondary filters** will be **ignored**.
+        - **partnerAS2Id​** - AS2 identifier of the AS2 Partner that sent/received these messages
+        - **stationAS2Id​** - AS2 identifier of the AS2 Station that received/sent these messages
+
+        **Secondary filters:** Can apply **single secondary filter per API request**. Secondary filters will be applied in the listed precedence. If apply more than one secondary filter in a single API request, **the highest precedence** secondary filter will be applied and the rest will be ignored.
+        - **as2MessageId**​​ - ID of the required AS2 message
+        - **subject​** - Any subject string, to filter messages against
+      operationId: ListFailedMessages
+      parameters:
+        - name: Authorization
+          in: header
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: auth_token
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '344'
+                  example: '344'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: keep-alive
+                  example: keep-alive
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Tue, 28 Jul 2020 06:43:15 GMT
+                  example: Tue, 28 Jul 2020 06:43:15 GMT
+            x-amzn-RequestId:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: 306d26a7-4af5-44a7-9c18-bbc6e66fff65
+                  example: 306d26a7-4af5-44a7-9c18-bbc6e66fff65
+            x-amzn-Remapped-content-length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '344'
+                  example: '344'
+            x-amz-apigw-id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: QXxYjHXwoAMFkvA=
+                  example: QXxYjHXwoAMFkvA=
+            etag:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: W/"158-psUW0sy0NIQ/Z4iRVNxwE9Axkx8"
+                  example: W/"158-psUW0sy0NIQ/Z4iRVNxwE9Axkx8"
+            x-powered-by:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Express
+                  example: Express
+            X-Amzn-Trace-Id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Root=1-5f1fc903-cd5d7fa2370db0d9061bbcd1;Sampled=0
+                  example: Root=1-5f1fc903-cd5d7fa2370db0d9061bbcd1;Sampled=0
+            X-Cache:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Miss from cloudfront
+                  example: Miss from cloudfront
+            Via:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: 1.1 0b3572829f6f42309f3adfa694398770.cloudfront.net (CloudFront)
+                  example: 1.1 0b3572829f6f42309f3adfa694398770.cloudfront.net (CloudFront)
+            X-Amz-Cf-Pop:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: SIN5-C1
+                  example: SIN5-C1
+            X-Amz-Cf-Id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: _ByYIJ_dki3_1pclv5yiJQSYTUiioSxnQXBpnX15EDiAO6TpbJBKGw==
+                  example: _ByYIJ_dki3_1pclv5yiJQSYTUiioSxnQXBpnX15EDiAO6TpbJBKGw==
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse8'
+              example:
+                messages:
+                  - <15947238462751@mftgateway.com>
+                  - <15947238459292@mftgateway.com>
+                  - <15947238448470@mftgateway.com>
+                  - <15947238445442@mftgateway.com>
+                  - <15947238431266@mftgateway.com>
+                  - <15947238429941@mftgateway.com>
+                  - <15947238426609@mftgateway.com>
+      deprecated: false
+      security: []
+  /message/outbox/incomplete:
+    get:
+      tags:
+        - Message
+      summary: List Incompleted Messages (Coming Soon)
+      description: |-
+        This API endpoint can be used to list **send incomplete** messages with **optional** filters as **query** parameters. 
+          
+        ----
+        MFT Gateway marks sent messages as incomplete when trading partner accepted the message but failed to acknowledge before the configured connection timeout.
+
+
+        **General filters:** Can be applied along with other filters(primary/secondary) without any restriction
+        - **sortDir**​ - Sort direction. Allowed values are **​asc​** and **​desc​**. Defaults to ​desc​.
+        - **pageOffset**​ - Page number. An integer value greater than or equal to zero is accepted. Default is zero.
+        - **pageLength​** - Length of a page. An integer value greater than or equal to 1 and less than or equal to 100 is accepted. Default is 10.
+
+        **Primary filters:** Have higher precedence over secondary files. If apply both primary and secondary filters in a single API request, **secondary filters** will be **ignored**.
+        - **partnerAS2Id​** - AS2 identifier of the AS2 Partner that sent/received these messages
+        - **stationAS2Id​** - AS2 identifier of the AS2 Station that received/sent these messages
+
+        **Secondary filters:** Can apply **single secondary filter per API request**. Secondary filters will be applied in the listed precedence. If apply more than one secondary filter in a single API request, **the highest precedence** secondary filter will be applied and the rest will be ignored.
+        - **as2MessageId**​​ - ID of the required AS2 message
+        - **subject​** - Any subject string, to filter messages against
+      operationId: ListIncompletedMessages(ComingSoon)
+      parameters:
+        - name: Authorization
+          in: header
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: auth_token
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '344'
+                  example: '344'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: keep-alive
+                  example: keep-alive
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Tue, 28 Jul 2020 06:43:15 GMT
+                  example: Tue, 28 Jul 2020 06:43:15 GMT
+            x-amzn-RequestId:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: 306d26a7-4af5-44a7-9c18-bbc6e66fff65
+                  example: 306d26a7-4af5-44a7-9c18-bbc6e66fff65
+            x-amzn-Remapped-content-length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '344'
+                  example: '344'
+            x-amz-apigw-id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: QXxYjHXwoAMFkvA=
+                  example: QXxYjHXwoAMFkvA=
+            etag:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: W/"158-psUW0sy0NIQ/Z4iRVNxwE9Axkx8"
+                  example: W/"158-psUW0sy0NIQ/Z4iRVNxwE9Axkx8"
+            x-powered-by:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Express
+                  example: Express
+            X-Amzn-Trace-Id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Root=1-5f1fc903-cd5d7fa2370db0d9061bbcd1;Sampled=0
+                  example: Root=1-5f1fc903-cd5d7fa2370db0d9061bbcd1;Sampled=0
+            X-Cache:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Miss from cloudfront
+                  example: Miss from cloudfront
+            Via:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: 1.1 0b3572829f6f42309f3adfa694398770.cloudfront.net (CloudFront)
+                  example: 1.1 0b3572829f6f42309f3adfa694398770.cloudfront.net (CloudFront)
+            X-Amz-Cf-Pop:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: SIN5-C1
+                  example: SIN5-C1
+            X-Amz-Cf-Id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: _ByYIJ_dki3_1pclv5yiJQSYTUiioSxnQXBpnX15EDiAO6TpbJBKGw==
+                  example: _ByYIJ_dki3_1pclv5yiJQSYTUiioSxnQXBpnX15EDiAO6TpbJBKGw==
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse8'
+              example:
+                messages:
+                  - <15947238462751@mftgateway.com>
+                  - <15947238459292@mftgateway.com>
+                  - <15947238448470@mftgateway.com>
+                  - <15947238445442@mftgateway.com>
+                  - <15947238431266@mftgateway.com>
+      deprecated: false
+      security: []
+  /message/inbox/{as2MessageId}/attachments:
+    get:
+      tags:
+        - Message
+      summary: Retrieve Inbox (Received) Message Attachment(s)
+      description: This API endpoint can be used to retrieve pre sign URL(s) to download **received** message attachment(s) from Amazon S3 bucket. Please note that the **validity of the S3 signed URL is limited to 10 minutes**.
+      operationId: RetrieveInbox(Received)MessageAttachment(s)
+      parameters:
+        - name: as2MessageId
+          in: path
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: <158719527.1469.1594924294698@as2gateway.com>
+        - name: Authorization
+          in: header
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: auth_token
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '1337'
+                  example: '1337'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: keep-alive
+                  example: keep-alive
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Tue, 28 Jul 2020 11:00:19 GMT
+                  example: Tue, 28 Jul 2020 11:00:19 GMT
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse15'
+              example:
+                total: 1
+                attachments:
+                  - name: Attachment.raw
+                    url: https://mftg-my-bucket.s3.amazonaws.com/AS2/files/MyStation/MyPartner/inbox/1594924300560-333/Attachment.raw?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIA5ZHZSFAWLSPHUVP7%2F20200728%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20200728T110019Z&X-Amz-Expires=600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEDMaCXVzLWVhc3QtMSJIMEYCIQCWmQLPrM6yJuGXyfa02uwVj9nhO9TgykFYgnO7pw3PzQIhAOd2qR0LQ%2BIpU2izw%2BMcYK0R5C8UgWX3oVC%2BKzt70ZaWKuMBCOz%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQABoMOTQ3NTYzNjY5NTQ4Igx5mzeWLIVApF6w7sYqtwGpje0TL%2F3Kwj7wCI1LRmIUfKK6YUaNtzPfftPS1ZA54rfOrAV29yyJym5ZJ4BMBUL1dtclA5Uwejg%2F5m8zcBHP75DmFRKVyO1U74h%2FknuIxjh7qtObkHXf3vvD6amFCdDB1hdqBs7pk2yB93IsFRkyBJtZAU7EOaGC%2BbhCghClqEmcLsMkC5FWAoHxM%2FncSSwkdDa1VBLy3%2BRDhzPlQddhggymrGgNlYdbHIi9DUbVtB83qC2fbB4wjIqA%2BQU63wFAj3I5FFE4C6IpvPnokaVJ93h9Iegy0zVaaQjOYBG3QdyTyefc%2BJWSuVhJMk770mYyWsVcTJMUUb1FWQ%2BKL2gqlxKjJGqdyxJR9ZuX3CJC3dKQWCUeIjausiJevBW7ReeUwCJEM52tOHwNvTMSPStkV%2FHUleAhmGQ0Q%2F5x8Sz%2BHgbxlUD%2B%2FfEuJq3N4ZKt80BX%2FlKRUnmoNAub8%2BpHbZBLKZPIJQt1aBMIHNn1EdCmx4li00EXdLSYCrDTmob7Vw8SIhwOFlOxQ1qNfKmKNUwN5xNyvLgzzyavdrnJwfgq&X-Amz-Signature=2972481f458e4b4aa0453264885f345fdbbb889f87fb08d8b3cb2577266d9b92&X-Amz-SignedHeaders=host
+        '404':
+          description: Not Found
+          headers:
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '31'
+                  example: '31'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: keep-alive
+                  example: keep-alive
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Tue, 28 Jul 2020 11:16:01 GMT
+                  example: Tue, 28 Jul 2020 11:16:01 GMT
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse1'
+              example:
+                message: Attachment(s) not found
+      deprecated: false
+      security: []
+  /message/inbox/{as2MessageId}/mdn:
+    get:
+      tags:
+        - Message
+      summary: Retrieve Inbox (Received) Message MDN
+      description: This API endpoint can be used to retrieve S3 pre sign URL to download **Sent** MDN from Amazon S3 bucket for a **received** message. Please note that the **validity of the S3 signed URL is limited 10 minutes**.
+      operationId: RetrieveInbox(Received)MessageMDN
+      parameters:
+        - name: as2MessageId
+          in: path
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: <158719527.1469.1594924294698@as2gateway.com>
+        - name: Authorization
+          in: header
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: auth_token
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '1192'
+                  example: '1192'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: keep-alive
+                  example: keep-alive
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Tue, 28 Jul 2020 11:14:20 GMT
+                  example: Tue, 28 Jul 2020 11:14:20 GMT
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse17'
+              example:
+                url: https://mftg-my-bucket.s3.amazonaws.com/AS2/raw-mdn/incoming/10959001878639/mdn.raw?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIA5ZHZSFAWLSPHUVP7%2F20200728%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20200728T111420Z&X-Amz-Expires=600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEDMaCXVzLWVhc3QtMSJIMEYCIQCWmQLPrM6yJuGXyfa02uwVj9nhO9TgykFYgnO7pw3PzQIhAOd2qR0LQ%2BIpU2izw%2BMcYK0R5C8UgWX3oVC%2BKzt70ZaWKuMBCOz%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQABoMOTQ3NTYzNjY5NTQ4Igx5mzeWLIVApF6w7sYqtwGpje0TL%2F3Kwj7wCI1LRmIUfKK6YUaNtzPfftPS1ZA54rfOrAV29yyJym5ZJ4BMBUL1dtclA5Uwejg%2F5m8zcBHP75DmFRKVyO1U74h%2FknuIxjh7qtObkHXf3vvD6amFCdDB1hdqBs7pk2yB93IsFRkyBJtZAU7EOaGC%2BbhCghClqEmcLsMkC5FWAoHxM%2FncSSwkdDa1VBLy3%2BRDhzPlQddhggymrGgNlYdbHIi9DUbVtB83qC2fbB4wjIqA%2BQU63wFAj3I5FFE4C6IpvPnokaVJ93h9Iegy0zVaaQjOYBG3QdyTyefc%2BJWSuVhJMk770mYyWsVcTJMUUb1FWQ%2BKL2gqlxKjJGqdyxJR9ZuX3CJC3dKQWCUeIjausiJevBW7ReeUwCJEM52tOHwNvTMSPStkV%2FHUleAhmGQ0Q%2F5x8Sz%2BHgbxlUD%2B%2FfEuJq3N4ZKt80BX%2FlKRUnmoNAub8%2BpHbZBLKZPIJQt1aBMIHNn1EdCmx4li00EXdLSYCrDTmob7Vw8SIhwOFlOxQ1qNfKmKNUwN5xNyvLgzzyavdrnJwfgq&X-Amz-Signature=2641a9625dc0cab29702dcb67fc33ee66e0df5edfb0aa6c2c7029cc54110602f&X-Amz-SignedHeaders=host
+        '404':
+          description: Not Found
+          headers:
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '31'
+                  example: '31'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: keep-alive
+                  example: keep-alive
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Tue, 28 Jul 2020 10:30:36 GMT
+                  example: Tue, 28 Jul 2020 10:30:36 GMT
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse1'
+              example:
+                message: MDN not found
+      deprecated: false
+      security: []
+  /partner:
+    post:
+      tags:
+        - Partner
+      summary: Create Partner (Coming Soon)
+      description: |-
+        This endpoint can be used to create a new trading partner.
+
+        ----
+        Request Headers
+
+        - **Authorization** - Authorization header with auth token.
+
+        Request Body: Should be a valid JSON with following fields.
+
+        Mandatory fields
+
+        - **name** - Partner name (String).
+        - **as2Identifier** - Partner AS2 identifier (String).
+        - **url** - Trading partner message delivery endpoint (String).
+        - **encryptionCertificate** - Base64 encoded encryption certificate (Base64 encoded String)
+
+        Optional fields
+        - **encryptMessage** - Encrypt outbound messages? (Boolean | Default: true)
+        - **encryptionAlgorithm** - Encryption algorithm. Allowed algorithms: 'DES_EDE3_CBC', 'AES128_CBC', 'AES192_CBC', 'AES256_CBC', 'CAMELLIA128_CBC', 'CAMELLIA192_CBC', 'CAMELLIA256_CBC', 'CAST5_CBC', 'RC2_CBC', 'SEED_CBC', 'ECDH_SHA1KDF' (String | Default: 'DES_EDE3_CBC')
+        - **signMessage** - Sign outbound messages? (Boolean | Default: true)
+        - **signatureAlgorithm** - Signature algorithm. Allowed algorithms: 'SHA1', 'MD2', 'MD5', 'SHA224', 'SHA256', 'SHA384', 'SHA512' (String | Default: 'SHA1')
+        - **transmissionTimeout** - Maximum waiting time(seconds) before closing connection  Allowed values: 60, 120, 180, 300 (Number | Default: 120)
+        - **useDiffCertAsSignCert** - Use a different certificate to verify signature of the **inbound** messages. If set to **false** encryptionCertificate will be used to validate incoming message signatures. (Boolean | Default: false)
+        - **signatureCertificate** - Base64 encoded signature certificate (Base64 encoded String | Required if **useDiffCertAsSignCert** set to **true**)
+        - **httpsCertificate** - Base64 encoded SSL certificate (Base64 encoded String)
+        - **encryptSignChainCertificates** - Base64 encoded encryption/sign chain certificate(s) (Array of base64 encoded String)
+        - **httpsChainCertificates** - Base64 encoded SSL chain certificate(s) (Array of base64 encoded String)
+        - **validateTrustAnchor** - Validate trust anchor of the uploaded certificates (Boolean | Default: false)
+        - **description** - Description of the trading partner (String)
+        - **messageSubject** - Default message subject for trading partner (String| Min Length: 1, Max Length: 128)
+        - **compressBefore** - Compress messages before encryption/sign (Boolean | Default: false)
+        - **compressAfter** - Compress messages after encryption/sign (Boolean | Default: false)
+        - **requestMDN** - Request Message Disposition Notification (Boolean | Default: true)
+        - **requestSignedMDN** - Request signed Message Disposition Notification (Boolean | Default: true)
+        - **requestAsyncMDN** - Request asynchronous Disposition Notification (Boolean | Default: false)
+        - **useStaticIP** - Use Static IP for outbound messages (Business/Enterprise tier feature) (Boolean | Default: false)
+        - **deleteAttachmentsOnSuccessMdn** - Delete Attachments from the S3 bucket when success MDN received (Boolean | Default: false)
+        - **autoRetryIncompleteMessages** - Auto retry incomplete messages. Incomplete messages may have successfully processed by the trading partner but failed to acknowledge before the configured timeout. If sets to **true** there is a possibility of duplicating outbound messages. (Boolean | Default: false)
+        - **customHeaders** - Custom transport headers to be included in the outbound messages to this trading partner. (Array of {"headerName": "string", "headerValue": "string"}) following header names are reserved and cannot be used. 'as2-from', 'as2-to', 'as2-version', 'content-transfer-encoding', 'content-type', 'disposition-notification-options', 'mime-version', 'message-id', 'receipt-delivery-option', 'destination'
+      operationId: CreatePartner(ComingSoon)
+      parameters:
+        - name: Authorization
+          in: header
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: auth-token
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePartnerComingSoonRequest'
+            example:
+              name: Partner Name
+              as2Identifier: partner_as2_id
+              url: https://partner.com
+              encryptionCertificate: <Base64 encoded encryption certificate>
+              encryptMessage: true
+              encryptionAlgorithm: DES_EDE3_CBC
+              signMessage: true
+              signatureAlgorithm: SHA1
+              httpsCertificate: <Base64 encoded SSL certificate>
+              httpsChainCertificates:
+                - <Base64 encoded SSL chain certificate one>
+                - <Base64 encoded SSL chain certificate two>
+              customHeaders:
+                - headerName: <custom-header-name>
+                  headerValue: <custom-header-value>
+        required: true
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '43'
+                  example: '43'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: keep-alive
+                  example: keep-alive
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Mon, 04 Oct 2021 06:42:28 GMT
+                  example: Mon, 04 Oct 2021 06:42:28 GMT
+            x-amzn-RequestId:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: 7aed8280-4716-46f4-9a1d-d85398dbe62c
+                  example: 7aed8280-4716-46f4-9a1d-d85398dbe62c
+            x-amzn-Remapped-content-length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '43'
+                  example: '43'
+            x-amz-apigw-id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Gq5K_GJOoAMFZyA=
+                  example: Gq5K_GJOoAMFZyA=
+            etag:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: W/"2b-vcY5zWlTrJKXmHigC05HSKQZ2Vg"
+                  example: W/"2b-vcY5zWlTrJKXmHigC05HSKQZ2Vg"
+            x-powered-by:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Express
+                  example: Express
+            X-Amzn-Trace-Id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Root=1-615aa246-5a928b9745847a3133121a66;Sampled=0
+                  example: Root=1-615aa246-5a928b9745847a3133121a66;Sampled=0
+            X-Cache:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Miss from cloudfront
+                  example: Miss from cloudfront
+            Via:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: 1.1 d454a4131cad7323027c4a71e9d4c5d1.cloudfront.net (CloudFront)
+                  example: 1.1 d454a4131cad7323027c4a71e9d4c5d1.cloudfront.net (CloudFront)
+            X-Amz-Cf-Pop:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: SIN2-C1
+                  example: SIN2-C1
+            X-Amz-Cf-Id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: SgY7YXyT1zzOQ2565gSiLXTTKV3l3LRK1EfmrDppjh6NsStSufaHmQ==
+                  example: SgY7YXyT1zzOQ2565gSiLXTTKV3l3LRK1EfmrDppjh6NsStSufaHmQ==
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse19'
+              example:
+                message: Partner created successfully
+                partnerId: 555131984980067
+        '422':
+          description: Unprocessable
+          headers:
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '43'
+                  example: '43'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: keep-alive
+                  example: keep-alive
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Mon, 04 Oct 2021 06:42:28 GMT
+                  example: Mon, 04 Oct 2021 06:42:28 GMT
+            x-amzn-RequestId:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: 7aed8280-4716-46f4-9a1d-d85398dbe62c
+                  example: 7aed8280-4716-46f4-9a1d-d85398dbe62c
+            x-amzn-Remapped-content-length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '43'
+                  example: '43'
+            x-amz-apigw-id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Gq5K_GJOoAMFZyA=
+                  example: Gq5K_GJOoAMFZyA=
+            etag:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: W/"2b-vcY5zWlTrJKXmHigC05HSKQZ2Vg"
+                  example: W/"2b-vcY5zWlTrJKXmHigC05HSKQZ2Vg"
+            x-powered-by:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Express
+                  example: Express
+            X-Amzn-Trace-Id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Root=1-615aa246-5a928b9745847a3133121a66;Sampled=0
+                  example: Root=1-615aa246-5a928b9745847a3133121a66;Sampled=0
+            X-Cache:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Miss from cloudfront
+                  example: Miss from cloudfront
+            Via:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: 1.1 d454a4131cad7323027c4a71e9d4c5d1.cloudfront.net (CloudFront)
+                  example: 1.1 d454a4131cad7323027c4a71e9d4c5d1.cloudfront.net (CloudFront)
+            X-Amz-Cf-Pop:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: SIN2-C1
+                  example: SIN2-C1
+            X-Amz-Cf-Id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: SgY7YXyT1zzOQ2565gSiLXTTKV3l3LRK1EfmrDppjh6NsStSufaHmQ==
+                  example: SgY7YXyT1zzOQ2565gSiLXTTKV3l3LRK1EfmrDppjh6NsStSufaHmQ==
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/PartnerExistsResponse1'
+              example:
+                message: User input validation failed. Please try again
+                errors:
+                  - as2Identifier: 'Partner already exists with AS2 identifier: partner_as2_id'
+      deprecated: false
+      security: []
+  /station:
+    post:
+      tags:
+        - Station
+      summary: Create Station (Coming Soon)
+      description: |-
+        This endpoint can be used to create a new station.
+
+        ----
+        ### Request Headers
+
+        - **Authorization** - Authorization header with auth token.
+
+        ### Request Body
+        Should be a valid JSON with following fields.
+
+        Mandatory fields
+
+        - **name** - Station name (String).
+        - **as2Identifier** - Station AS2 identifier (String).
+        - **email** - Comma separated list of emails (up to maximum of 3 emails) (String).
+        - **certificate** - nested JSON object with station identity certificate configuration - refer **Station Certificate** section below for details. (object)
+
+        Optional fields
+        - **description** - Description of the station (String)
+        - **receivedMessageNotifications** - Enable email notifications for received messages (Boolean | Default: false)
+        - **failedMessageNotifications** - Enable email notifications for message send failures (Boolean | Default: true)
+        - **largePayloadSupport** - Receive messages with payload size larger than 3MB with static IP address (Business/Enterprise tier feature) (Boolean | Default: false)
+
+        Station Certificate
+        - **type** - Certificate configuration type. (Required) Allowed values: 'NEW_SELF_SIGN_CERTIFICATE', 'FROM_KEYSTORE', 'FROM_CERTIFICATE_STORE'
+
+
+        Certificate type: NEW_SELF_SIGN_CERTIFICATE - Generates a new self signed certificate for the station
+        - **commonName** - Certificate Common Name (String | Required)
+        - **password** - Private key password (String | Required)
+        - **keyLength** - Certificate key length (Number | Default: 2048) Allowed values: 1024, 2048, 4096
+        - **validity** - Certificate validity in years (Number | Default: 5 years) Allowed values: 1, 2, 5, 8, 10
+        - **orgUnit** - Organization unit (String | Optional)
+        - **orgName** - Organization name (String | Optional)
+        - **city** - City  (String | Optional)
+        - **state** - State code ISO 3166-1 alpha-2  (String | Optional)
+        - **country** - Country code ISO 3166-1 alpha-2  (String | Optional)
+
+
+        Certificate type: FROM_KEYSTORE
+        - **keystore** - S3 key of the existing keystore in your MFT Gateway S3 bucket (String | Required)
+        - **keystorePassword** - Keystore password (String | Required)
+        - **alias** - Existing certificate alias (String | Required)
+        - **privateKeyPassword** - Existing private key password (String | Required)
+        - **newPrivateKeyPassword** - New private key password. If not provided, the existing private key password will be used as new password (String | Optional)
+
+        Certificate type: FROM_CERTIFICATE_STORE
+        - **alias** - Existing MFT Gateway **IDENTITY** type certificate alias (String | Required)
+      operationId: CreateStation(ComingSoon)
+      parameters:
+        - name: Authorization
+          in: header
+          description: ''
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: auth-token
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStationComingSoonRequest'
+            example:
+              name: Station
+              as2Identifier: station
+              email: email1@email.com,email3@email.com,email3@email.com
+              certificate:
+                type: NEW_SELF_SIGN_CERTIFICATE
+                commonName: Certificate CN
+                password: private-key-password
+                keyLength: 2048
+                validity: 5
+                orgUnit: Organization Unit
+                orgName: Organization Name
+                city: City
+                state: State
+                country: US
+        required: true
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '70'
+                  example: '70'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: keep-alive
+                  example: keep-alive
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Mon, 04 Oct 2021 11:58:52 GMT
+                  example: Mon, 04 Oct 2021 11:58:52 GMT
+            x-amzn-RequestId:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: b00d9913-ede4-4012-ba08-0a62d157dd0c
+                  example: b00d9913-ede4-4012-ba08-0a62d157dd0c
+            x-amzn-Remapped-content-length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '70'
+                  example: '70'
+            x-amz-apigw-id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: GrngVFYWoAMFa2Q=
+                  example: GrngVFYWoAMFa2Q=
+            etag:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: W/"46-4U6McMR55nj0knxYOaIFEgq+TaI"
+                  example: W/"46-4U6McMR55nj0knxYOaIFEgq+TaI"
+            x-powered-by:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Express
+                  example: Express
+            X-Amzn-Trace-Id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Root=1-615aec68-3587182b40e76d161221d6e8;Sampled=0
+                  example: Root=1-615aec68-3587182b40e76d161221d6e8;Sampled=0
+            X-Cache:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Miss from cloudfront
+                  example: Miss from cloudfront
+            Via:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: 1.1 08244b1866fe32276ce5a76c3d8b5ec7.cloudfront.net (CloudFront)
+                  example: 1.1 08244b1866fe32276ce5a76c3d8b5ec7.cloudfront.net (CloudFront)
+            X-Amz-Cf-Pop:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: SIN52-C2
+                  example: SIN52-C2
+            X-Amz-Cf-Id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: _QPlxtkzSY0pi4LDyRb5kDA6JaQtUpC1KDqo41os1fKQTcRR29yv-Q==
+                  example: _QPlxtkzSY0pi4LDyRb5kDA6JaQtUpC1KDqo41os1fKQTcRR29yv-Q==
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse-WithSelfSignedCertificate'
+              example:
+                message: Station created successfully
+                stationId: 555119144483082
+        '422':
+          description: Unprocessable
+          headers:
+            Content-Length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '43'
+                  example: '43'
+            Connection:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: keep-alive
+                  example: keep-alive
+            Date:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Mon, 04 Oct 2021 06:42:28 GMT
+                  example: Mon, 04 Oct 2021 06:42:28 GMT
+            x-amzn-RequestId:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: 7aed8280-4716-46f4-9a1d-d85398dbe62c
+                  example: 7aed8280-4716-46f4-9a1d-d85398dbe62c
+            x-amzn-Remapped-content-length:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: '43'
+                  example: '43'
+            x-amz-apigw-id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Gq5K_GJOoAMFZyA=
+                  example: Gq5K_GJOoAMFZyA=
+            etag:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: W/"2b-vcY5zWlTrJKXmHigC05HSKQZ2Vg"
+                  example: W/"2b-vcY5zWlTrJKXmHigC05HSKQZ2Vg"
+            x-powered-by:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Express
+                  example: Express
+            X-Amzn-Trace-Id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Root=1-615aa246-5a928b9745847a3133121a66;Sampled=0
+                  example: Root=1-615aa246-5a928b9745847a3133121a66;Sampled=0
+            X-Cache:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: Miss from cloudfront
+                  example: Miss from cloudfront
+            Via:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: 1.1 d454a4131cad7323027c4a71e9d4c5d1.cloudfront.net (CloudFront)
+                  example: 1.1 d454a4131cad7323027c4a71e9d4c5d1.cloudfront.net (CloudFront)
+            X-Amz-Cf-Pop:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: SIN2-C1
+                  example: SIN2-C1
+            X-Amz-Cf-Id:
+              content:
+                text/plain:
+                  schema:
+                    type: string
+                    example: SgY7YXyT1zzOQ2565gSiLXTTKV3l3LRK1EfmrDppjh6NsStSufaHmQ==
+                  example: SgY7YXyT1zzOQ2565gSiLXTTKV3l3LRK1EfmrDppjh6NsStSufaHmQ==
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/StationAS2IdentifierNotAvailableResponse1'
+              example:
+                message: User input validation failed. Please try again
+                errors:
+                  - as2Identifier: 'Station already exists with AS2 identifier: station_as2_id'
+      deprecated: false
+      security: []
+components:
+  schemas:
+    AuthorizeRequest:
+      title: AuthorizeRequest
+      required:
+        - username
+        - password
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      example:
+        username: myemail@mydomain.com
+        password: Abc@1234
+    FailedAuthorization1:
+      title: FailedAuthorization1
+      required:
+        - message
+      type: object
+      properties:
+        message:
+          type: string
+      example:
+        message: 'Authentication Failed: Bad credentials'
+    SuccessfulAuthorization:
+      title: SuccessfulAuthorization
+      required:
+        - api_token
+        - refresh_token
+      type: object
+      properties:
+        api_token:
+          type: string
+        refresh_token:
+          type: string
+      example:
+        api_token: <JWT_token>
+        refresh_token: <JWT_token>
+    RefreshAuthTokenRequest:
+      title: RefreshAuthTokenRequest
+      required:
+        - username
+        - refreshToken
+      type: object
+      properties:
+        username:
+          type: string
+        refreshToken:
+          type: string
+      example:
+        username: myemail@mydomain.com
+        refreshToken: refresh_token
+    FailedSessionRefresh1:
+      title: FailedSessionRefresh1
+      required:
+        - message
+      type: object
+      properties:
+        message:
+          type: string
+      example:
+        message: Error occurred while refreshing the user session
+    SuccessfulSessionRefresh:
+      title: SuccessfulSessionRefresh
+      required:
+        - api_token
+        - refresh_token
+      type: object
+      properties:
+        api_token:
+          type: string
+        refresh_token:
+          type: string
+      example:
+        api_token: <JWT_token>
+        refresh_token: <JWT_token>
+    SuccessResponse:
+      title: SuccessResponse
+      required:
+        - alias
+        - type
+      type: object
+      properties:
+        alias:
+          type: string
+        type:
+          type: string
+      example:
+        alias: f54967f4-23fb-4b1a-9759-ba6b94cd7922
+        type: HTTPS
+    SuccessResponce-WithCertificateTypeFilter:
+      title: SuccessResponce-WithCertificateTypeFilter
+      required:
+        - alias
+        - type
+      type: object
+      properties:
+        alias:
+          type: string
+        type:
+          type: string
+      example:
+        alias: 48f358bb-f815-45ad-a5b8-11916ece0d88
+        type: STATION
+    SuccessResponse1:
+      title: SuccessResponse1
+      required:
+        - alias
+        - type
+        - serial_number
+        - subject_common_name
+        - subject_distinguish_name
+        - issuer_common_name
+        - issuer_distinguish_name
+        - valid_from
+        - expiry
+        - belongsTo
+      type: object
+      properties:
+        alias:
+          type: string
+        type:
+          type: string
+        serial_number:
+          type: string
+        subject_common_name:
+          type: string
+        subject_distinguish_name:
+          type: string
+        issuer_common_name:
+          type: string
+        issuer_distinguish_name:
+          type: string
+        valid_from:
+          type: string
+        expiry:
+          type: string
+        belongsTo:
+          type: array
+          items:
+            type: string
+          description: ''
+      example:
+        alias: f54967f4-23fb-4b1a-9759-ba6b94cd7922
+        type: HTTPS
+        serial_number: 66c9fcf99bf8c0a39e2f0788a43e696365bca
+        subject_common_name: Amazon Root CA 1
+        subject_distinguish_name: CN=Amazon Root CA 1, O=Amazon, C=US
+        issuer_common_name: Amazon Root CA 1
+        issuer_distinguish_name: CN=Amazon Root CA 1, O=Amazon, C=US
+        valid_from: Tue May 26 00:00:00 UTC 2015
+        expiry: Sun Jan 17 00:00:00 UTC 2038
+        belongsTo:
+          - Partner-01
+          - Station_02
+    NotFoundResponse1:
+      title: NotFoundResponse1
+      required:
+        - message
+      type: object
+      properties:
+        message:
+          type: string
+      example:
+        message: 'Unable to find certificate with alias: f54967f4-23fb-4b1a-9759-ba6b94cd79222'
+    SuccessResponse2:
+      title: SuccessResponse2
+      required:
+        - message
+      type: object
+      properties:
+        message:
+          type: string
+      example:
+        message: Message queued successfully
+    UnprocessableRequest1:
+      title: UnprocessableRequest1
+      required:
+        - message
+      type: object
+      properties:
+        message:
+          type: string
+      example:
+        message: 'Unable to find partner with AS2 identifier: MyPartner'
+    MessageNotFound1:
+      title: MessageNotFound1
+      required:
+        - message
+      type: object
+      properties:
+        message:
+          type: string
+      example:
+        message: Message not found
+    BatchDeleteInboxReceivedMessagesRequest:
+      title: BatchDeleteInboxReceivedMessagesRequest
+      required:
+        - as2MessageIds
+      type: object
+      properties:
+        as2MessageIds:
+          type: array
+          items:
+            type: string
+          description: ''
+      example:
+        as2MessageIds:
+          - <16206212538784368@mftgateway.com>
+          - <16094169443904964@mftgateway.com>
+    SuccessResponse4:
+      title: SuccessResponse4
+      required:
+        - deleted
+      type: object
+      properties:
+        deleted:
+          type: array
+          items:
+            type: string
+          description: ''
+      example:
+        deleted:
+          - <16206212538784368@mftgateway.com>
+          - <16094169443904964@mftgateway.com>
+    BatchDeleteOutboxSentQueuedFailedMessagesRequest:
+      title: BatchDeleteOutboxSentQueuedFailedMessagesRequest
+      required:
+        - as2MessageIds
+      type: object
+      properties:
+        as2MessageIds:
+          type: array
+          items:
+            type: string
+          description: ''
+      example:
+        as2MessageIds:
+          - <16206212538784368@mftgateway.com>
+          - <16094169443904964@mftgateway.com>
+    SuccessResponse6:
+      title: SuccessResponse6
+      required:
+        - deleted
+      type: object
+      properties:
+        deleted:
+          type: string
+      example:
+        deleted: <16206212538784367@mftgateway.com>
+    SuccessResponse8:
+      title: SuccessResponse8
+      required:
+        - messages
+      type: object
+      properties:
+        messages:
+          type: array
+          items:
+            type: string
+          description: ''
+      example:
+        messages:
+          - <15947211062750@mftgateway.com>
+          - <15947210997311@mftgateway.com>
+          - <15947210989114@mftgateway.com>
+          - <15947210979767@mftgateway.com>
+          - <15947210969966@mftgateway.com>
+          - <15947210950640@mftgateway.com>
+          - <15947210941011@mftgateway.com>
+    SuccessResponse-Nomessages:
+      title: SuccessResponse-Nomessages
+      required:
+        - messages
+      type: object
+      properties:
+        messages:
+          type: array
+          items:
+            type: string
+          description: ''
+      example:
+        messages: []
+    SuccessResponse13:
+      title: SuccessResponse13
+      required:
+        - id
+        - as2MessageId
+        - incoming
+        - msgStatus
+        - mdnStatus
+        - receiverAS2Id
+        - senderAS2Id
+        - subject
+        - failures
+        - attachmentPaths
+        - compressed
+        - signed
+        - encrypted
+        - mic
+        - micMatches
+        - transportStatusReceived
+        - userAgent
+        - timestamp
+        - apiFetched
+        - transportHeaders
+        - mdnMessage
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        as2MessageId:
+          type: string
+        incoming:
+          type: boolean
+        msgStatus:
+          type: string
+        mdnStatus:
+          type: string
+        receiverAS2Id:
+          type: string
+        senderAS2Id:
+          type: string
+        subject:
+          type: string
+        failures:
+          type: integer
+          format: int32
+        attachmentPaths:
+          type: array
+          items:
+            type: string
+          description: ''
+        compressed:
+          type: boolean
+        signed:
+          type: boolean
+        encrypted:
+          type: boolean
+        mic:
+          type: string
+        micMatches:
+          type: boolean
+        transportStatusReceived:
+          type: integer
+          format: int32
+        userAgent:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+        apiFetched:
+          type: boolean
+        transportHeaders:
+          $ref: '#/components/schemas/TransportHeaders'
+        mdnMessage:
+          $ref: '#/components/schemas/MdnMessage'
+      example:
+        id: 10959001878639
+        as2MessageId: <158719527.1469.1594924294698@as2gateway.com>
+        incoming: true
+        msgStatus: Received
+        mdnStatus: Sent Signed MDN
+        receiverAS2Id: MyStation
+        senderAS2Id: MyPartner
+        subject: AS2 Message from MyPartner
+        failures: 0
+        attachmentPaths:
+          - AS2/files/MyStation/MyPartner/inbox/1594924300560-333/Attachment.raw
+        compressed: false
+        signed: true
+        encrypted: true
+        mic: cxbzphztud4C6z8+lJa0R9V6uUw=, sha1
+        micMatches: false
+        transportStatusReceived: 0
+        userAgent: AdroitLogic UltraESB-X
+        timestamp: 1594924304442
+        apiFetched: true
+        transportHeaders:
+          CloudFront-Viewer-Country: US
+          CloudFront-Forwarded-Proto: https
+          CloudFront-Is-Tablet-Viewer: 'false'
+          AS2-From: MyPartner
+          User-Agent: AdroitLogic UltraESB-X
+          Accept-Encoding: gzip
+          Content-Transfer-Encoding: binary
+          Message-ID: <158719527.1469.1594924294698@as2gateway.com>
+          Disposition-Notification-Options: signed-receipt-protocol=optional,pkcs7-signature; signed-receipt-micalg=optional,sha1,md5
+          X-Amz-Cf-Id: AmhW08tMTpI8DJrXnIuFHGiUHspdX_GZ4GM2qW93SDi4dycpwkjxMw==
+          AS2-To: MyStation
+          CloudFront-Is-Desktop-Viewer: 'true'
+          Content-Type: application/octet-stream; name="smime.p7m"; smime-type=enveloped-data
+          CloudFront-Is-Mobile-Viewer: 'false'
+          X-Forwarded-Proto: https
+          CloudFront-Is-SmartTV-Viewer: 'false'
+          Disposition-Notification-To: mystation@mymail.com
+          AS2-Version: '1.1'
+          Host: service.mftgateway.com
+          From: mystation@mymail.com
+          X-Forwarded-Port: '443'
+          MIME-Version: '1.0'
+          Subject: 'AS2 Message from: MyPartner'
+          X-Amzn-Trace-Id: Root=1-5f109d08-0fec3714afc0950ce8508fd4
+          Via: 1.1 f7a968b55c3516da72549b98f99704a4.cloudfront.net (CloudFront)
+          X-Forwarded-For: 52.204.119.191, 130.176.98.78
+        mdnMessage:
+          mdnId: <1870054092.0.1594924307180@mftgateway.com>
+          messageId: 10959001878639
+          as2MessageId: <158719527.1469.1594924294698@as2gateway.com>
+          disposition: automatic-action/MDN-sent-automatically; processed
+          humanMessage: "MDN for Message-ID: <158719527.1469.1594924294698@as2gateway.com>\r\nFrom: MyPartner\r\nTo: MyStation\r\nReceived on: Thu Jul 16 18:31:46 UTC 2020\r\nStatus: processed\r\nComment: This is not a guarantee that the message has been completely processed or understood by the receiving translator.\r\nPowered by MFT Gateway\r\n"
+          rawMdnS3Key: AS2/raw-mdn/incoming/10959001878639/mdn.raw
+          mic: cxbzphztud4C6z8+lJa0R9V6uUw=, sha1
+          signed: true
+          incoming: false
+          status: Sent Signed MDN
+          timestamp: 1594924307980
+    TransportHeaders:
+      title: TransportHeaders
+      required:
+        - CloudFront-Viewer-Country
+        - CloudFront-Forwarded-Proto
+        - CloudFront-Is-Tablet-Viewer
+        - AS2-From
+        - User-Agent
+        - Accept-Encoding
+        - Content-Transfer-Encoding
+        - Message-ID
+        - Disposition-Notification-Options
+        - X-Amz-Cf-Id
+        - AS2-To
+        - CloudFront-Is-Desktop-Viewer
+        - Content-Type
+        - CloudFront-Is-Mobile-Viewer
+        - X-Forwarded-Proto
+        - CloudFront-Is-SmartTV-Viewer
+        - Disposition-Notification-To
+        - AS2-Version
+        - Host
+        - From
+        - X-Forwarded-Port
+        - MIME-Version
+        - Subject
+        - X-Amzn-Trace-Id
+        - Via
+        - X-Forwarded-For
+      type: object
+      properties:
+        CloudFront-Viewer-Country:
+          type: string
+        CloudFront-Forwarded-Proto:
+          type: string
+        CloudFront-Is-Tablet-Viewer:
+          type: string
+        AS2-From:
+          type: string
+        User-Agent:
+          type: string
+        Accept-Encoding:
+          type: string
+        Content-Transfer-Encoding:
+          type: string
+        Message-ID:
+          type: string
+        Disposition-Notification-Options:
+          type: string
+        X-Amz-Cf-Id:
+          type: string
+        AS2-To:
+          type: string
+        CloudFront-Is-Desktop-Viewer:
+          type: string
+        Content-Type:
+          type: string
+        CloudFront-Is-Mobile-Viewer:
+          type: string
+        X-Forwarded-Proto:
+          type: string
+        CloudFront-Is-SmartTV-Viewer:
+          type: string
+        Disposition-Notification-To:
+          type: string
+        AS2-Version:
+          type: string
+        Host:
+          type: string
+        From:
+          type: string
+        X-Forwarded-Port:
+          type: string
+        MIME-Version:
+          type: string
+        Subject:
+          type: string
+        X-Amzn-Trace-Id:
+          type: string
+        Via:
+          type: string
+        X-Forwarded-For:
+          type: string
+      example:
+        CloudFront-Viewer-Country: US
+        CloudFront-Forwarded-Proto: https
+        CloudFront-Is-Tablet-Viewer: 'false'
+        AS2-From: MyPartner
+        User-Agent: AdroitLogic UltraESB-X
+        Accept-Encoding: gzip
+        Content-Transfer-Encoding: binary
+        Message-ID: <158719527.1469.1594924294698@as2gateway.com>
+        Disposition-Notification-Options: signed-receipt-protocol=optional,pkcs7-signature; signed-receipt-micalg=optional,sha1,md5
+        X-Amz-Cf-Id: AmhW08tMTpI8DJrXnIuFHGiUHspdX_GZ4GM2qW93SDi4dycpwkjxMw==
+        AS2-To: MyStation
+        CloudFront-Is-Desktop-Viewer: 'true'
+        Content-Type: application/octet-stream; name="smime.p7m"; smime-type=enveloped-data
+        CloudFront-Is-Mobile-Viewer: 'false'
+        X-Forwarded-Proto: https
+        CloudFront-Is-SmartTV-Viewer: 'false'
+        Disposition-Notification-To: mystation@mymail.com
+        AS2-Version: '1.1'
+        Host: service.mftgateway.com
+        From: mystation@mymail.com
+        X-Forwarded-Port: '443'
+        MIME-Version: '1.0'
+        Subject: 'AS2 Message from: MyPartner'
+        X-Amzn-Trace-Id: Root=1-5f109d08-0fec3714afc0950ce8508fd4
+        Via: 1.1 f7a968b55c3516da72549b98f99704a4.cloudfront.net (CloudFront)
+        X-Forwarded-For: 52.204.119.191, 130.176.98.78
+    MdnMessage:
+      title: MdnMessage
+      required:
+        - mdnId
+        - messageId
+        - as2MessageId
+        - disposition
+        - humanMessage
+        - rawMdnS3Key
+        - mic
+        - signed
+        - incoming
+        - status
+        - timestamp
+      type: object
+      properties:
+        mdnId:
+          type: string
+        messageId:
+          type: integer
+          format: int64
+        as2MessageId:
+          type: string
+        disposition:
+          type: string
+        humanMessage:
+          type: string
+        rawMdnS3Key:
+          type: string
+        mic:
+          type: string
+        signed:
+          type: boolean
+        incoming:
+          type: boolean
+        status:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+      example:
+        mdnId: <1870054092.0.1594924307180@mftgateway.com>
+        messageId: 10959001878639
+        as2MessageId: <158719527.1469.1594924294698@as2gateway.com>
+        disposition: automatic-action/MDN-sent-automatically; processed
+        humanMessage: "MDN for Message-ID: <158719527.1469.1594924294698@as2gateway.com>\r\nFrom: MyPartner\r\nTo: MyStation\r\nReceived on: Thu Jul 16 18:31:46 UTC 2020\r\nStatus: processed\r\nComment: This is not a guarantee that the message has been completely processed or understood by the receiving translator.\r\nPowered by MFT Gateway\r\n"
+        rawMdnS3Key: AS2/raw-mdn/incoming/10959001878639/mdn.raw
+        mic: cxbzphztud4C6z8+lJa0R9V6uUw=, sha1
+        signed: true
+        incoming: false
+        status: Sent Signed MDN
+        timestamp: 1594924307980
+    SuccessResponse14:
+      title: SuccessResponse14
+      required:
+        - id
+        - as2MessageId
+        - incoming
+        - msgStatus
+        - mdnStatus
+        - receiverAS2Id
+        - senderAS2Id
+        - subject
+        - attachmentPaths
+        - compressed
+        - signed
+        - encrypted
+        - mic
+        - micMatches
+        - transportStatusReceived
+        - timestamp
+        - apiFetched
+        - transportHeaders
+        - mdnMessage
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        as2MessageId:
+          type: string
+        incoming:
+          type: boolean
+        msgStatus:
+          type: string
+        mdnStatus:
+          type: string
+        receiverAS2Id:
+          type: string
+        senderAS2Id:
+          type: string
+        subject:
+          type: string
+        attachmentPaths:
+          type: array
+          items:
+            type: string
+          description: ''
+        compressed:
+          type: boolean
+        signed:
+          type: boolean
+        encrypted:
+          type: boolean
+        mic:
+          type: string
+        micMatches:
+          type: boolean
+        transportStatusReceived:
+          type: integer
+          format: int32
+        timestamp:
+          type: integer
+          format: int64
+        apiFetched:
+          type: boolean
+        transportHeaders:
+          $ref: '#/components/schemas/TransportHeaders1'
+        mdnMessage:
+          $ref: '#/components/schemas/MdnMessage'
+      example:
+        id: 159592985268293700
+        as2MessageId: <159592985268202050@mftgateway.com>
+        incoming: false
+        msgStatus: Sent
+        mdnStatus: Received; MDN Signature Verified
+        receiverAS2Id: MyPartner
+        senderAS2Id: MyStation
+        subject: Test Message from API
+        attachmentPaths:
+          - AS2/files/MyStation/MyPartner/outbox/1595929852764-479/Attachment.raw
+        compressed: false
+        signed: true
+        encrypted: true
+        mic: rx3QMbPGeKtkoubnmibSxBbe9Gs=, sha1
+        micMatches: true
+        transportStatusReceived: 200
+        timestamp: 1595929857954
+        apiFetched: false
+        transportHeaders:
+          AS2-From: MyStation
+          User-Agent: MFT Gateway
+          Disposition-Notification-To: mystation@mymail.com
+          AS2-Version: '1.1'
+          From: mystation@mymail.com
+          Message-Id: <159592985268202050@mftgateway.com>
+          Content-Transfer-Encoding: binary
+          AS2-To: MyPartner
+          Disposition-Notification-Options: signed-receipt-protocol=required,pkcs7-signature; signed-receipt-micalg=required,sha1,md5
+          Subject: Test Message from API
+          MIME-Version: '1.0'
+          Content-Type: application/octet-stream; name="smime.p7m"; smime-type=enveloped-data
+        mdnMessage:
+          mdnId: <1129007699.17286.1595929857998@as2gateway.com>
+          messageId: 159592985268293700
+          as2MessageId: <159592985268202050@mftgateway.com>
+          disposition: automatic-action/MDN-sent-automatically;processed
+          humanMessage: "MDN for Message-ID: <159592985268202050@mftgateway.com>\r\nFrom: MyStation\r\nTo: MyPartner\r\nReceived on: Tue Jul 28 09:50:57 UTC 2020\r\nStatus: processed\r\nComment: This is not a guarantee that the message has been completely processed or understood by the receiving translator\r\nPowered by the AdroitLogic UltraESB-X (https://www.adroitlogic.com)\r\n"
+          rawMdnS3Key: AS2/raw-mdn/incoming/159592985268293700/mdn.raw
+          mic: rx3QMbPGeKtkoubnmibSxBbe9Gs=, sha1
+          signed: true
+          incoming: true
+          status: Received; MDN Signature Verified
+          timestamp: 1595929858171
+    TransportHeaders1:
+      title: TransportHeaders1
+      required:
+        - AS2-From
+        - User-Agent
+        - Disposition-Notification-To
+        - AS2-Version
+        - From
+        - Message-Id
+        - Content-Transfer-Encoding
+        - AS2-To
+        - Disposition-Notification-Options
+        - Subject
+        - MIME-Version
+        - Content-Type
+      type: object
+      properties:
+        AS2-From:
+          type: string
+        User-Agent:
+          type: string
+        Disposition-Notification-To:
+          type: string
+        AS2-Version:
+          type: string
+        From:
+          type: string
+        Message-Id:
+          type: string
+        Content-Transfer-Encoding:
+          type: string
+        AS2-To:
+          type: string
+        Disposition-Notification-Options:
+          type: string
+        Subject:
+          type: string
+        MIME-Version:
+          type: string
+        Content-Type:
+          type: string
+      example:
+        AS2-From: MyStation
+        User-Agent: MFT Gateway
+        Disposition-Notification-To: mystation@mymail.com
+        AS2-Version: '1.1'
+        From: mystation@mymail.com
+        Message-Id: <159592985268202050@mftgateway.com>
+        Content-Transfer-Encoding: binary
+        AS2-To: MyPartner
+        Disposition-Notification-Options: signed-receipt-protocol=required,pkcs7-signature; signed-receipt-micalg=required,sha1,md5
+        Subject: Test Message from API
+        MIME-Version: '1.0'
+        Content-Type: application/octet-stream; name="smime.p7m"; smime-type=enveloped-data
+    SuccessResponse15:
+      title: SuccessResponse15
+      required:
+        - total
+        - attachments
+      type: object
+      properties:
+        total:
+          type: integer
+          format: int32
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attachment'
+          description: ''
+      example:
+        total: 1
+        attachments:
+          - name: Attachment.raw
+            url: https://mftg-my-bucket.s3.amazonaws.com/AS2/files/MyStation/MyPartner/inbox/1594924300560-333/Attachment.raw?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIA5ZHZSFAWLSPHUVP7%2F20200728%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20200728T110019Z&X-Amz-Expires=600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEDMaCXVzLWVhc3QtMSJIMEYCIQCWmQLPrM6yJuGXyfa02uwVj9nhO9TgykFYgnO7pw3PzQIhAOd2qR0LQ%2BIpU2izw%2BMcYK0R5C8UgWX3oVC%2BKzt70ZaWKuMBCOz%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQABoMOTQ3NTYzNjY5NTQ4Igx5mzeWLIVApF6w7sYqtwGpje0TL%2F3Kwj7wCI1LRmIUfKK6YUaNtzPfftPS1ZA54rfOrAV29yyJym5ZJ4BMBUL1dtclA5Uwejg%2F5m8zcBHP75DmFRKVyO1U74h%2FknuIxjh7qtObkHXf3vvD6amFCdDB1hdqBs7pk2yB93IsFRkyBJtZAU7EOaGC%2BbhCghClqEmcLsMkC5FWAoHxM%2FncSSwkdDa1VBLy3%2BRDhzPlQddhggymrGgNlYdbHIi9DUbVtB83qC2fbB4wjIqA%2BQU63wFAj3I5FFE4C6IpvPnokaVJ93h9Iegy0zVaaQjOYBG3QdyTyefc%2BJWSuVhJMk770mYyWsVcTJMUUb1FWQ%2BKL2gqlxKjJGqdyxJR9ZuX3CJC3dKQWCUeIjausiJevBW7ReeUwCJEM52tOHwNvTMSPStkV%2FHUleAhmGQ0Q%2F5x8Sz%2BHgbxlUD%2B%2FfEuJq3N4ZKt80BX%2FlKRUnmoNAub8%2BpHbZBLKZPIJQt1aBMIHNn1EdCmx4li00EXdLSYCrDTmob7Vw8SIhwOFlOxQ1qNfKmKNUwN5xNyvLgzzyavdrnJwfgq&X-Amz-Signature=2972481f458e4b4aa0453264885f345fdbbb889f87fb08d8b3cb2577266d9b92&X-Amz-SignedHeaders=host
+    Attachment:
+      title: Attachment
+      required:
+        - name
+        - url
+      type: object
+      properties:
+        name:
+          type: string
+        url:
+          type: string
+      example:
+        name: Attachment.raw
+        url: https://mftg-my-bucket.s3.amazonaws.com/AS2/files/MyStation/MyPartner/inbox/1594924300560-333/Attachment.raw?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIA5ZHZSFAWLSPHUVP7%2F20200728%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20200728T110019Z&X-Amz-Expires=600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEDMaCXVzLWVhc3QtMSJIMEYCIQCWmQLPrM6yJuGXyfa02uwVj9nhO9TgykFYgnO7pw3PzQIhAOd2qR0LQ%2BIpU2izw%2BMcYK0R5C8UgWX3oVC%2BKzt70ZaWKuMBCOz%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQABoMOTQ3NTYzNjY5NTQ4Igx5mzeWLIVApF6w7sYqtwGpje0TL%2F3Kwj7wCI1LRmIUfKK6YUaNtzPfftPS1ZA54rfOrAV29yyJym5ZJ4BMBUL1dtclA5Uwejg%2F5m8zcBHP75DmFRKVyO1U74h%2FknuIxjh7qtObkHXf3vvD6amFCdDB1hdqBs7pk2yB93IsFRkyBJtZAU7EOaGC%2BbhCghClqEmcLsMkC5FWAoHxM%2FncSSwkdDa1VBLy3%2BRDhzPlQddhggymrGgNlYdbHIi9DUbVtB83qC2fbB4wjIqA%2BQU63wFAj3I5FFE4C6IpvPnokaVJ93h9Iegy0zVaaQjOYBG3QdyTyefc%2BJWSuVhJMk770mYyWsVcTJMUUb1FWQ%2BKL2gqlxKjJGqdyxJR9ZuX3CJC3dKQWCUeIjausiJevBW7ReeUwCJEM52tOHwNvTMSPStkV%2FHUleAhmGQ0Q%2F5x8Sz%2BHgbxlUD%2B%2FfEuJq3N4ZKt80BX%2FlKRUnmoNAub8%2BpHbZBLKZPIJQt1aBMIHNn1EdCmx4li00EXdLSYCrDTmob7Vw8SIhwOFlOxQ1qNfKmKNUwN5xNyvLgzzyavdrnJwfgq&X-Amz-Signature=2972481f458e4b4aa0453264885f345fdbbb889f87fb08d8b3cb2577266d9b92&X-Amz-SignedHeaders=host
+    SuccessResponse17:
+      title: SuccessResponse17
+      required:
+        - url
+      type: object
+      properties:
+        url:
+          type: string
+      example:
+        url: https://mftg-my-bucket.s3.amazonaws.com/AS2/raw-mdn/incoming/10959001878639/mdn.raw?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIA5ZHZSFAWLSPHUVP7%2F20200728%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20200728T111420Z&X-Amz-Expires=600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEDMaCXVzLWVhc3QtMSJIMEYCIQCWmQLPrM6yJuGXyfa02uwVj9nhO9TgykFYgnO7pw3PzQIhAOd2qR0LQ%2BIpU2izw%2BMcYK0R5C8UgWX3oVC%2BKzt70ZaWKuMBCOz%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQABoMOTQ3NTYzNjY5NTQ4Igx5mzeWLIVApF6w7sYqtwGpje0TL%2F3Kwj7wCI1LRmIUfKK6YUaNtzPfftPS1ZA54rfOrAV29yyJym5ZJ4BMBUL1dtclA5Uwejg%2F5m8zcBHP75DmFRKVyO1U74h%2FknuIxjh7qtObkHXf3vvD6amFCdDB1hdqBs7pk2yB93IsFRkyBJtZAU7EOaGC%2BbhCghClqEmcLsMkC5FWAoHxM%2FncSSwkdDa1VBLy3%2BRDhzPlQddhggymrGgNlYdbHIi9DUbVtB83qC2fbB4wjIqA%2BQU63wFAj3I5FFE4C6IpvPnokaVJ93h9Iegy0zVaaQjOYBG3QdyTyefc%2BJWSuVhJMk770mYyWsVcTJMUUb1FWQ%2BKL2gqlxKjJGqdyxJR9ZuX3CJC3dKQWCUeIjausiJevBW7ReeUwCJEM52tOHwNvTMSPStkV%2FHUleAhmGQ0Q%2F5x8Sz%2BHgbxlUD%2B%2FfEuJq3N4ZKt80BX%2FlKRUnmoNAub8%2BpHbZBLKZPIJQt1aBMIHNn1EdCmx4li00EXdLSYCrDTmob7Vw8SIhwOFlOxQ1qNfKmKNUwN5xNyvLgzzyavdrnJwfgq&X-Amz-Signature=2641a9625dc0cab29702dcb67fc33ee66e0df5edfb0aa6c2c7029cc54110602f&X-Amz-SignedHeaders=host
+    CreatePartnerComingSoonRequest:
+      title: CreatePartnerComingSoonRequest
+      required:
+        - name
+        - as2Identifier
+        - url
+        - encryptionCertificate
+        - encryptMessage
+        - encryptionAlgorithm
+        - signMessage
+        - signatureAlgorithm
+        - httpsCertificate
+        - httpsChainCertificates
+        - customHeaders
+      type: object
+      properties:
+        name:
+          type: string
+        as2Identifier:
+          type: string
+        url:
+          type: string
+        encryptionCertificate:
+          type: string
+        encryptMessage:
+          type: boolean
+        encryptionAlgorithm:
+          type: string
+        signMessage:
+          type: boolean
+        signatureAlgorithm:
+          type: string
+        httpsCertificate:
+          type: string
+        httpsChainCertificates:
+          type: array
+          items:
+            type: string
+          description: ''
+        customHeaders:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomHeader'
+          description: ''
+      example:
+        name: Partner Name
+        as2Identifier: partner_as2_id
+        url: https://partner.com
+        encryptionCertificate: <Base64 encoded encryption certificate>
+        encryptMessage: true
+        encryptionAlgorithm: DES_EDE3_CBC
+        signMessage: true
+        signatureAlgorithm: SHA1
+        httpsCertificate: <Base64 encoded SSL certificate>
+        httpsChainCertificates:
+          - <Base64 encoded SSL chain certificate one>
+          - <Base64 encoded SSL chain certificate two>
+        customHeaders:
+          - headerName: <custom-header-name>
+            headerValue: <custom-header-value>
+    CustomHeader:
+      title: CustomHeader
+      required:
+        - headerName
+        - headerValue
+      type: object
+      properties:
+        headerName:
+          type: string
+        headerValue:
+          type: string
+      example:
+        headerName: <custom-header-name>
+        headerValue: <custom-header-value>
+    SuccessResponse19:
+      title: SuccessResponse19
+      required:
+        - message
+        - partnerId
+      type: object
+      properties:
+        message:
+          type: string
+        partnerId:
+          type: integer
+          format: int64
+      example:
+        message: Partner created successfully
+        partnerId: 555131984980067
+    Error:
+      title: Error
+      required:
+        - as2Identifier
+      type: object
+      properties:
+        as2Identifier:
+          type: string
+      example:
+        as2Identifier: 'Partner already exists with AS2 identifier: partner_as2_id'
+    PartnerExistsResponse1:
+      title: PartnerExistsResponse1
+      required:
+        - message
+        - errors
+      type: object
+      properties:
+        message:
+          type: string
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+          description: ''
+      example:
+        message: User input validation failed. Please try again
+        errors:
+          - as2Identifier: 'Partner already exists with AS2 identifier: partner_as2_id'
+    CreateStationComingSoonRequest:
+      title: CreateStationComingSoonRequest
+      required:
+        - name
+        - as2Identifier
+        - email
+        - certificate
+      type: object
+      properties:
+        name:
+          type: string
+        as2Identifier:
+          type: string
+        email:
+          type: string
+        certificate:
+          $ref: '#/components/schemas/Certificate'
+      example:
+        name: Station
+        as2Identifier: station
+        email: email1@email.com,email3@email.com,email3@email.com
+        certificate:
+          type: NEW_SELF_SIGN_CERTIFICATE
+          commonName: Certificate CN
+          password: private-key-password
+          keyLength: 2048
+          validity: 5
+          orgUnit: Organization Unit
+          orgName: Organization Name
+          city: City
+          state: State
+          country: US
+    Certificate:
+      title: Certificate
+      required:
+        - type
+        - commonName
+        - password
+        - keyLength
+        - validity
+        - orgUnit
+        - orgName
+        - city
+        - state
+        - country
+      type: object
+      properties:
+        type:
+          type: string
+        commonName:
+          type: string
+        password:
+          type: string
+        keyLength:
+          type: integer
+          format: int32
+        validity:
+          type: integer
+          format: int32
+        orgUnit:
+          type: string
+        orgName:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        country:
+          type: string
+      example:
+        type: NEW_SELF_SIGN_CERTIFICATE
+        commonName: Certificate CN
+        password: private-key-password
+        keyLength: 2048
+        validity: 5
+        orgUnit: Organization Unit
+        orgName: Organization Name
+        city: City
+        state: State
+        country: US
+    SuccessResponse-WithSelfSignedCertificate:
+      title: SuccessResponse-WithSelfSignedCertificate
+      required:
+        - message
+        - stationId
+      type: object
+      properties:
+        message:
+          type: string
+        stationId:
+          type: integer
+          format: int64
+      example:
+        message: Station created successfully
+        stationId: 555119144483082
+    SuccessResponse-WithExistingKeystore:
+      title: SuccessResponse-WithExistingKeystore
+      required:
+        - message
+        - stationId
+      type: object
+      properties:
+        message:
+          type: string
+        stationId:
+          type: integer
+          format: int64
+      example:
+        message: Station created successfully
+        stationId: 555122042243424
+    SuccessResponse-WithExistingMFTGIdentityCertificate:
+      title: SuccessResponse-WithExistingMFTGIdentityCertificate
+      required:
+        - message
+        - stationId
+      type: object
+      properties:
+        message:
+          type: string
+        stationId:
+          type: integer
+          format: int64
+      example:
+        message: Station created successfully
+        stationId: 555126200119664
+    StationAS2IdentifierNotAvailableResponse1:
+      title: StationAS2IdentifierNotAvailableResponse1
+      required:
+        - message
+        - errors
+      type: object
+      properties:
+        message:
+          type: string
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+          description: ''
+      example:
+        message: User input validation failed. Please try again
+        errors:
+          - as2Identifier: 'Station already exists with AS2 identifier: station_as2_id'
+tags:
+  - name: Authorization
+  - name: Certificate
+  - name: Message
+  - name: Partner
+  - name: Station
